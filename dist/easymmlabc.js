@@ -1,4 +1,4 @@
-import { SyntaxError, parse } from "./mml2abc.mjs";
+import { SyntaxError, parse } from "https://cdn.jsdelivr.net/gh/cat2151/mml2abc/dist/mml2abc.mjs";
 
 const easymml = {};
 easymml.mmlId = "mml";
@@ -6,6 +6,9 @@ easymml.mmlId = "mml";
 easymml.init = function() {
   easymml.mml = document.querySelector("#" + easymml.mmlId);
   easymml.mml.addEventListener("input", easymml.play);
+
+  easyabcjs6.play = easymml.play;
+  easyabcjs6.init();
 }
 
 easymml.play = function() {
