@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "target": "ES5",
+    "module": "ES2015"
+  },
+  "exclude": [
+    "./test/mml2abc.test.ts"
+  ]
+}
