@@ -226,7 +226,6 @@ function peg$parse(input, options) {
               mmlNoteLength = length ?? defaultMmlNoteLength;
             };
   var peg$f7 = function(pitch) {
-      // FIXME o-1～o3, o5～o9, ABC notation octave
       if (octave <= 4) { return pitch.toUpperCase(); }
       else { return pitch.toLowerCase(); } };
   var peg$f8 = function() { return parseInt(text(), 10); };
