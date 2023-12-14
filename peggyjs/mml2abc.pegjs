@@ -89,7 +89,8 @@ NOTE_LENGTH=_ [l] length:INTEGER? _ {
               mmlNoteLength = length ?? defaultMmlNoteLength; }
 TRACK_SEPARATOR=_ [;] _ {
                 track++;
-                return `\nV:TRACK${track}`; }
+                isNewLineTop = true;
+                return `\nV:TRACK${track}\n`; }
 
 PITCH=pitch:[a-g] sharp:SHARP* flat:FLAT* {
       pitch = sharp.join('') + flat.join('') + pitch;

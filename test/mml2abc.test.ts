@@ -161,5 +161,8 @@ describe("mml2abc", () => {
     test("TRACK_SEPARATOR", () => {
         expect(parse("g1; @38 o3c1")).toEqual(prefix + "G8\nV:TRACK2\n%%MIDI program 38\nC,,8");
     });
+    test("TRACK_SEPARATOR", () => {
+        expect(parse("c;e;g")).toEqual(prefix + "C2\nV:TRACK2\nE2\nV:TRACK3\nG2");
+    });
     // FIXME o3c 等が五線譜で見づらい。ABC notationではどう表示するのがセオリーか？を調査する
 });

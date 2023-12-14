@@ -285,7 +285,8 @@ function peg$parse(input, options) {
               mmlNoteLength = length ?? defaultMmlNoteLength; };
   var peg$f9 = function() {
                 track++;
-                return `\nV:TRACK${track}`; };
+                isNewLineTop = true;
+                return `\nV:TRACK${track}\n`; };
   var peg$f10 = function(pitch, sharp, flat) {
       pitch = sharp.join('') + flat.join('') + pitch;
       switch (octave) {
