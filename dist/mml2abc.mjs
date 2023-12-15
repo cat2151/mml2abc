@@ -247,8 +247,9 @@ function peg$parse(input, options) {
   var peg$e18 = peg$otherExpectation("whitespace");
   var peg$e19 = peg$classExpectation([" ", "\t", "\n", "\r"], false, false);
 
-  var peg$f0 = function(mmls) { return "[V:1]" + mmls.join(''); };
+  var peg$f0 = function(mmls) { return "V:1\n" + mmls.join(''); };
   var peg$f1 = function(pitch, length, dot) {
+      isNewLineTop = false;
       if (isStaccato) pitch = "." + pitch;
       const abcLength = getNoteLengthAbc(length ?? mmlNoteLength, dot.length);
       if (chordOctave !== null) {
@@ -262,13 +263,23 @@ function peg$parse(input, options) {
         return pitch + abcLength;
       } };
   var peg$f2 = function(length, dot) {
+      isNewLineTop = false;
       const abcLength = getNoteLengthAbc(length ?? mmlNoteLength, dot.length);
       return 'z' + abcLength; };
-  var peg$f3 = function(integer) { octave = integer ?? defaultOctave; };
-  var peg$f4 = function() { octave++; };
-  var peg$f5 = function() { octave--; };
-  var peg$f6 = function(length) { mmlNoteLength = length ?? defaultMmlNoteLength; };
+  var peg$f3 = function(integer) {
+        isNewLineTop = false;
+        octave = integer ?? defaultOctave; };
+  var peg$f4 = function() {
+          isNewLineTop = false;
+          octave++; };
+  var peg$f5 = function() {
+          isNewLineTop = false;
+          octave--; };
+  var peg$f6 = function(length) {
+            isNewLineTop = false;
+            mmlNoteLength = length ?? defaultMmlNoteLength; };
   var peg$f7 = function() {
+      isNewLineTop = false;
       if (chordOctave === null) {
         chordOctave = octave;
         chordAbcNoteLength = null;
@@ -279,9 +290,14 @@ function peg$parse(input, options) {
         chordAbcNoteLength = null;
         return "]";
       } };
-  var peg$f8 = function(integer) { return `[I:MIDI program ${integer}]`; };
-  var peg$f9 = function(integer) { return `[Q:${integer ?? defaultTempo}]`; };
+  var peg$f8 = function(integer) {
+              isNewLineTop = false;
+              return `[I:MIDI program ${integer}]`; };
+  var peg$f9 = function(integer) {
+      isNewLineTop = false;
+      return `[Q:${integer ?? defaultTempo}]`; };
   var peg$f10 = function(integer) {
+  isNewLineTop = false;
   integer ??= defaultMmlVolume;
   if (integer >= 16) {
     return "!ffff!";
@@ -310,6 +326,7 @@ function peg$parse(input, options) {
   }
 };
   var peg$f11 = function(integer) {
+  isNewLineTop = false;
   switch (integer) {
     case 8: isStaccato = false; return "";
     case 7: isStaccato = false; return "";
@@ -326,12 +343,14 @@ function peg$parse(input, options) {
   }
 };
   var peg$f12 = function(minus, integer) {
+          isNewLineTop = true;
           minus ??= "";
           integer ??= 0;
           return `[K:transpose=${minus}${integer}]\n`; };
   var peg$f13 = function() {
                 track++;
-                return `[V:${track}]`; };
+                isNewLineTop = true;
+                return `\nV:${track}\n`; };
   var peg$f14 = function(pitch, sharp, flat) {
       pitch = sharp.join('') + flat.join('') + pitch;
       switch (octave) {
@@ -1141,6 +1160,8 @@ function peg$parse(input, options) {
 
 
   let track = 1;
+  let isNewLineTop = true;
+
   let octave = defaultOctave;
   let mmlNoteLength = defaultMmlNoteLength;
   let chordOctave = null;
