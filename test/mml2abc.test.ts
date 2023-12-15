@@ -140,6 +140,9 @@ describe("mml2abc", () => {
     test("chord ZMUSIC style", () => {
         expect(parse("'c4.egb'")).toEqual(prefix + "[C3EGB]");
     });
+    test("chord ZMUSIC style ignore options", () => {
+        expect(parse("'cegb',48,6")).toEqual(prefix + "[C2EGB]");
+    });
     test("sharp", () => {
         expect(parse("l8 c+")).toEqual(prefix + "^C");
     });
@@ -153,16 +156,41 @@ describe("mml2abc", () => {
         expect(parse("l8 c--")).toEqual(prefix + "__C");
     });
     test("MIDI Program Change", () => {
-        expect(parse("@0 c")).toEqual(prefix + "%%MIDI program 0\nC2");
+        expect(parse("@0 c")).toEqual(prefix + "[I:MIDI program 0]C2");
     });
     test("MIDI Program Change", () => {
-        expect(parse("@0 c @4 e")).toEqual(prefix + "%%MIDI program 0\nC2\n%%MIDI program 4\nE2");
+        expect(parse("@0 c @4 e")).toEqual(prefix + "[I:MIDI program 0]C2[I:MIDI program 4]E2");
     });
     test("TRACK_SEPARATOR", () => {
-        expect(parse("g1; @38 o3c1")).toEqual(prefix + "G8\nV:TRACK2\n%%MIDI program 38\nC,,8");
+        expect(parse("g1; @38 o3c1")).toEqual(prefix + "G8\nV:TRACK2\n[I:MIDI program 38]C,,8");
     });
     test("TRACK_SEPARATOR", () => {
         expect(parse("c;e;g")).toEqual(prefix + "C2\nV:TRACK2\nE2\nV:TRACK3\nG2");
     });
-    // FIXME o3c 等が五線譜で見づらい。ABC notationではどう表示するのがセオリーか？を調査する
+    test("tempo BPM", () => {
+        expect(parse("l8t60cdeft150gfed")).toEqual(prefix + "[Q:60]CDEF[Q:150]GFED");
+    });
+    test("tempo BPM default", () => {
+        expect(parse("l8t150cdeftgfed")).toEqual(prefix + "[Q:150]CDEF[Q:120]GFED");
+    });
+    test("MML volume to ABC MIDI velocity", () => { // abcjs not recognized "%%MIDI control 7 50"
+        expect(parse("l8 v8 c")).toEqual(prefix + "!mp!C");
+    });
+    test("MML volume to ABC MIDI velocity", () => {
+        expect(parse("l8 vc v16c v0c")).toEqual(prefix + "!ffff!C!ffff!C!pppp!C");
+    });
+    test("MML q4 to ABC staccato", () => { // abc は staccato はあるが、それよりも細かいnote offタイミング制御はない
+        expect(parse("l8 c q4 c")).toEqual(prefix + "C.C");
+    });
+    test("key transpose", () => {
+        expect(parse("l8 kt2 c")).toEqual(prefix + '[K:transpose=2]\nC');
+        // abcjsは前後いずれかに改行がないとtransposeが有効にならない。
+        // transposeは五線譜に影響しない。イメージは移調楽器。
+        // abcjsは transpose 0 が無効である。2にしてから0に戻せない。
+    });
+    test("key transpose", () => {
+        expect(parse("l8 kt-2 c")).toEqual(prefix + '[K:transpose=-2]\nC');
+    });
+
+    // FIXME repeat l8[c] to CC
 });

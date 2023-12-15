@@ -1,5 +1,7 @@
 {{
   const defaultOctave = 5;
+  const defaultTempo = 120;
+  const defaultMmlVolume = 16;
   const defaultMmlNoteLength = 4;
   const abcBaseNoteLength = 8;
   function getNoteLengthAbc(length, dotLength) {
@@ -28,12 +30,14 @@
   }
 }}
 {
+  let track = 1;
+  let isNewLineTop = true;
+
   let octave = defaultOctave;
   let mmlNoteLength = defaultMmlNoteLength;
   let chordOctave = null;
   let chordAbcNoteLength = null;
-  let isNewLineTop = true;
-  let track = 1;
+  let isStaccato = false;
 }
 MMLs=mmls:MML* { return "V:TRACK1\n" + mmls.join(''); }
 MML=NOTE /REST
@@ -41,9 +45,14 @@ MML=NOTE /REST
     /NOTE_LENGTH
     /CHORD
     /PROGRAM_CHANGE
+    /TEMPO
+    /VOLUME
+    /STACCATO
+    /TRANSPOSE
     /TRACK_SEPARATOR
-NOTE=_ pitch:PITCH length:INTEGER? dot:[\.]* _ {
+NOTE=_ pitch:PITCH length:INTEGER? dot:"."* _ {
       isNewLineTop = false;
+      if (isStaccato) pitch = "." + pitch;
       const abcLength = getNoteLengthAbc(length ?? mmlNoteLength, dot.length);
       if (chordOctave !== null) {
         if (chordAbcNoteLength === null) {
@@ -55,20 +64,23 @@ NOTE=_ pitch:PITCH length:INTEGER? dot:[\.]* _ {
       } else {
         return pitch + abcLength;
       } }
-REST=_ [r] length:INTEGER? dot:[\.]*_ {
+REST=_ "r" length:INTEGER? dot:"."*_ {
       isNewLineTop = false;
       const abcLength = getNoteLengthAbc(length ?? mmlNoteLength, dot.length);
       return 'z' + abcLength; }
-OCTAVE=_ [o] integer:INTEGER? _ {
+OCTAVE=_ "o" integer:INTEGER? _ {
         isNewLineTop = false;
         octave = integer ?? defaultOctave; }
-OCTAVE_UP=_ [<] _ {
+OCTAVE_UP=_ "<" _ {
           isNewLineTop = false;
           octave++; }
-OCTAVE_DOWN=_ [>] _ {
+OCTAVE_DOWN=_ ">" _ {
           isNewLineTop = false;
           octave--; }
-CHORD=_ ['] _ {
+NOTE_LENGTH=_ "l" length:INTEGER? _ {
+            isNewLineTop = false;
+            mmlNoteLength = length ?? defaultMmlNoteLength; }
+CHORD=_ "'" ","? INTEGER? ","? INTEGER? _ {
       isNewLineTop = false;
       if (chordOctave === null) {
         chordOctave = octave;
@@ -80,14 +92,64 @@ CHORD=_ ['] _ {
         chordAbcNoteLength = null;
         return "]";
       } }
-PROGRAM_CHANGE=_ [@] integer:INTEGER _ {
-    let prefix = isNewLineTop ? "" : "\n";
-    isNewLineTop = true;
-    return `${prefix}%%MIDI program ${integer}\n`; }
-NOTE_LENGTH=_ [l] length:INTEGER? _ {
+PROGRAM_CHANGE=_ "@" integer:INTEGER _ {
               isNewLineTop = false;
-              mmlNoteLength = length ?? defaultMmlNoteLength; }
-TRACK_SEPARATOR=_ [;] _ {
+              return `[I:MIDI program ${integer}]`; }
+TEMPO=_ "t" integer:INTEGER? _ {
+      isNewLineTop = false;
+      return `[Q:${integer ?? defaultTempo}]`; }
+VOLUME=_ "v" integer:INTEGER? _ {
+  isNewLineTop = false;
+  integer ??= defaultMmlVolume;
+  if (integer >= 16) {
+    return "!ffff!";
+  } else {
+    switch (integer) {
+      case 15: return "!fff!";
+      case 14: return "!ff!";
+      case 13: return "!f!";
+      case 12: return "!f!";
+      case 11: return "!mf!";
+      case 10: return "!mf!";
+      case  9: return "!mp!";
+      case  8: return "!mp!";
+      case  7: return "!p!";
+      case  6: return "!p!";
+      case  5: return "!pp!";
+      case  4: return "!pp!";
+      case  3: return "!ppp!";
+      case  2: return "!ppp!";
+      case  1: return "!pppp!";
+      case  0: return "!pppp!";
+      default:
+          console.assert(false, "FIXME assert(0 <= integer && integer <= 32)");
+          return "!ffff!";
+    }
+  }
+}
+STACCATO=_ "q" integer:INTEGER? _ {
+  isNewLineTop = false;
+  switch (integer) {
+    case 8: isStaccato = false; return "";
+    case 7: isStaccato = false; return "";
+    case 6: isStaccato = false; return "";
+    case 5: isStaccato = false; return "";
+    case 4: isStaccato = true;  return "";
+    case 3: isStaccato = true;  return "";
+    case 2: isStaccato = true;  return "";
+    case 1: isStaccato = true;  return "";
+    case 0: isStaccato = true;  return "";
+    default:
+        console.assert(false, "FIXME assert(0 <= integer && integer <= 8)");
+        isStaccato = false; return "";
+  }
+}
+TRANSPOSE=_ "kt" minus:MINUS? integer:INTEGER? _ {
+          isNewLineTop = true;
+          minus ??= "";
+          integer ??= 0;
+          return `[K:transpose=${minus}${integer}]\n`; }
+TRACK_SEPARATOR=_ ";" _ {
                 track++;
                 isNewLineTop = true;
                 return `\nV:TRACK${track}\n`; }
@@ -112,6 +174,7 @@ PITCH=pitch:[a-g] sharp:SHARP* flat:FLAT* {
       }
 }
 SHARP= [+#] { return "^"; }
-FLAT= [-] { return "_"; }
+FLAT= "-" { return "_"; }
+MINUS= "-"
 INTEGER= [0-9]+ { return parseInt(text(), 10); }
 _ "whitespace"= [ \t\n\r]*
