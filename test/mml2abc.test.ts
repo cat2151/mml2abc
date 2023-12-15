@@ -1,6 +1,6 @@
 import { parse } from "../src/mml2abc.commonjs.js";
 describe("mml2abc", () => {
-    const prefix = "V:TRACK1\n";
+    const prefix = "[V:1]";
     test("note , pitch", () => {
         expect(parse("c")).toEqual(prefix + "C2");
     });
@@ -162,10 +162,10 @@ describe("mml2abc", () => {
         expect(parse("@0 c @4 e")).toEqual(prefix + "[I:MIDI program 0]C2[I:MIDI program 4]E2");
     });
     test("TRACK_SEPARATOR", () => {
-        expect(parse("g1; @38 o3c1")).toEqual(prefix + "G8\nV:TRACK2\n[I:MIDI program 38]C,,8");
+        expect(parse("g1; @38 o3c1")).toEqual(prefix + "G8[V:2][I:MIDI program 38]C,,8");
     });
     test("TRACK_SEPARATOR", () => {
-        expect(parse("c;e;g")).toEqual(prefix + "C2\nV:TRACK2\nE2\nV:TRACK3\nG2");
+        expect(parse("c;e;g")).toEqual(prefix + "C2[V:2]E2[V:3]G2");
     });
     test("tempo BPM", () => {
         expect(parse("l8t60cdeft150gfed")).toEqual(prefix + "[Q:60]CDEF[Q:150]GFED");

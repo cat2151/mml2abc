@@ -31,15 +31,13 @@
 }}
 {
   let track = 1;
-  let isNewLineTop = true;
-
   let octave = defaultOctave;
   let mmlNoteLength = defaultMmlNoteLength;
   let chordOctave = null;
   let chordAbcNoteLength = null;
   let isStaccato = false;
 }
-MMLs=mmls:MML* { return "V:TRACK1\n" + mmls.join(''); }
+MMLs=mmls:MML* { return "[V:1]" + mmls.join(''); }
 MML=NOTE /REST
     /OCTAVE /OCTAVE_UP /OCTAVE_DOWN
     /NOTE_LENGTH
@@ -51,7 +49,6 @@ MML=NOTE /REST
     /TRANSPOSE
     /TRACK_SEPARATOR
 NOTE=_ pitch:PITCH length:INTEGER? dot:"."* _ {
-      isNewLineTop = false;
       if (isStaccato) pitch = "." + pitch;
       const abcLength = getNoteLengthAbc(length ?? mmlNoteLength, dot.length);
       if (chordOctave !== null) {
@@ -65,23 +62,13 @@ NOTE=_ pitch:PITCH length:INTEGER? dot:"."* _ {
         return pitch + abcLength;
       } }
 REST=_ "r" length:INTEGER? dot:"."*_ {
-      isNewLineTop = false;
       const abcLength = getNoteLengthAbc(length ?? mmlNoteLength, dot.length);
       return 'z' + abcLength; }
-OCTAVE=_ "o" integer:INTEGER? _ {
-        isNewLineTop = false;
-        octave = integer ?? defaultOctave; }
-OCTAVE_UP=_ "<" _ {
-          isNewLineTop = false;
-          octave++; }
-OCTAVE_DOWN=_ ">" _ {
-          isNewLineTop = false;
-          octave--; }
-NOTE_LENGTH=_ "l" length:INTEGER? _ {
-            isNewLineTop = false;
-            mmlNoteLength = length ?? defaultMmlNoteLength; }
+OCTAVE=_ "o" integer:INTEGER? _ { octave = integer ?? defaultOctave; }
+OCTAVE_UP=_ "<" _ { octave++; }
+OCTAVE_DOWN=_ ">" _ { octave--; }
+NOTE_LENGTH=_ "l" length:INTEGER? _ { mmlNoteLength = length ?? defaultMmlNoteLength; }
 CHORD=_ "'" ","? INTEGER? ","? INTEGER? _ {
-      isNewLineTop = false;
       if (chordOctave === null) {
         chordOctave = octave;
         chordAbcNoteLength = null;
@@ -92,14 +79,9 @@ CHORD=_ "'" ","? INTEGER? ","? INTEGER? _ {
         chordAbcNoteLength = null;
         return "]";
       } }
-PROGRAM_CHANGE=_ "@" integer:INTEGER _ {
-              isNewLineTop = false;
-              return `[I:MIDI program ${integer}]`; }
-TEMPO=_ "t" integer:INTEGER? _ {
-      isNewLineTop = false;
-      return `[Q:${integer ?? defaultTempo}]`; }
+PROGRAM_CHANGE=_ "@" integer:INTEGER _ { return `[I:MIDI program ${integer}]`; }
+TEMPO=_ "t" integer:INTEGER? _ { return `[Q:${integer ?? defaultTempo}]`; }
 VOLUME=_ "v" integer:INTEGER? _ {
-  isNewLineTop = false;
   integer ??= defaultMmlVolume;
   if (integer >= 16) {
     return "!ffff!";
@@ -128,7 +110,6 @@ VOLUME=_ "v" integer:INTEGER? _ {
   }
 }
 STACCATO=_ "q" integer:INTEGER? _ {
-  isNewLineTop = false;
   switch (integer) {
     case 8: isStaccato = false; return "";
     case 7: isStaccato = false; return "";
@@ -145,14 +126,12 @@ STACCATO=_ "q" integer:INTEGER? _ {
   }
 }
 TRANSPOSE=_ "kt" minus:MINUS? integer:INTEGER? _ {
-          isNewLineTop = true;
           minus ??= "";
           integer ??= 0;
           return `[K:transpose=${minus}${integer}]\n`; }
 TRACK_SEPARATOR=_ ";" _ {
                 track++;
-                isNewLineTop = true;
-                return `\nV:TRACK${track}\n`; }
+                return `[V:${track}]`; }
 
 PITCH=pitch:[a-g] sharp:SHARP* flat:FLAT* {
       pitch = sharp.join('') + flat.join('') + pitch;
