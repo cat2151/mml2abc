@@ -165,6 +165,7 @@ describe("mml2abc", () => {
         // abcjs issues候補:
         //  abcjsは [V:2] 形式のとき、
         //  program changeに失敗して V:1のprogram changeが使われてしまう。
+        //  例： [V:1][I:MIDI program 18]C4[V:2][I:MIDI program 0]z4E4
         //  このため、改行を使う形式で対処した。
         expect(parse("g1; @38 o3c1")).toEqual(prefix + "G8\nV:2\n[I:MIDI program 38]C,,8");
     });
@@ -191,15 +192,21 @@ describe("mml2abc", () => {
         // transposeは五線譜に影響しない。イメージは移調楽器。
         // abcjs issues候補:
         //  abcjsは 前後いずれかに改行がないとtransposeが有効にならない。
+        //      例： C[K:transpose=2]C
         //      このため、改行を入れて対処した。
         //  abcjsは transpose 0 が無効である。2にしてから0に戻せない。
+        //      例： "C[K:transpose=2]\nC[K:transpose=0]\nC"
         //      対処方法不明。
         //  abcjsは 複数trackに複数transposeがあるとき、
         //      V:2の先頭のtranposeが無視され、V:1の最後のtransposeが使われる。
+        //      例： "V:1\nK:transpose=0\nC\nV:2\nK:transpose=3\nC"
         //      対処方法不明。
     });
     test("key transpose", () => {
         expect(parse("l8 kt-2 c")).toEqual(prefix + '[K:transpose=-2]\nC');
+    });
+    test("key transpose", () => {
+        expect(parse("l8 c kt7; c")).toEqual(prefix + 'C[K:transpose=7]\nV:2\nC');
     });
 
     // FIXME repeat l8[c] to CC

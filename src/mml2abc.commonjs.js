@@ -351,8 +351,9 @@ function peg$parse(input, options) {
           return `[K:transpose=${minus}${integer}]\n`; };
   var peg$f13 = function() {
                 track++;
+                let prefix = isNewLineTop ? "" : "\n";
                 isNewLineTop = true;
-                return `\nV:${track}\n`; };
+                return `${prefix}V:${track}\n`; };
   var peg$f14 = function(pitch, sharp, flat) {
       pitch = sharp.join('') + flat.join('') + pitch;
       switch (octave) {

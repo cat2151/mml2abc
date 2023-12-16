@@ -151,8 +151,9 @@ TRANSPOSE=_ "kt" minus:MINUS? integer:INTEGER? _ {
           return `[K:transpose=${minus}${integer}]\n`; }
 TRACK_SEPARATOR=_ ";" _ {
                 track++;
+                let prefix = isNewLineTop ? "" : "\n";
                 isNewLineTop = true;
-                return `\nV:${track}\n`; }
+                return `${prefix}V:${track}\n`; }
 
 PITCH=pitch:[a-g] sharp:SHARP* flat:FLAT* {
       pitch = sharp.join('') + flat.join('') + pitch;
