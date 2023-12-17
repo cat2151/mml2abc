@@ -4,8 +4,8 @@ A library transpiles Music Macro Language into ABC music notation.
 # demo
 https://cat2151.github.io/mml2abc/dist/
 
-# •ª’S
-- `mml2abc.pegjs ‚ðì‚é‚±‚Æ`
-  - ‚ªA‚±‚ÌƒŠƒ|ƒWƒgƒŠ‚Ì’S“–‚Å‚·B
-- `easy‚Émml2abc‚ðŽg‚¦‚éŽd‘g‚Ý ‚ðì‚é‚±‚Æ`
-  - ‚ÍA[easymmlabc](https://github.com/cat2151/easymmlabc/)‚Å’S“–‚µ‚Ü‚·B
+# åˆ†æ‹…
+- `mml2abc.pegjs ã‚’ä½œã‚‹ã“ã¨`
+  - ãŒã€ã“ã®ãƒªãƒã‚¸ãƒˆãƒªã®æ‹…å½“ã§ã™ã€‚
+- `easyã«mml2abcã‚’ä½¿ãˆã‚‹ä»•çµ„ã¿ ã‚’ä½œã‚‹ã“ã¨`
+  - ã¯ã€[easymmlabc](https://github.com/cat2151/easymmlabc/)ã§æ‹…å½“ã—ã¾ã™ã€‚
