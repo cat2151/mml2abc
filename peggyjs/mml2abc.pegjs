@@ -49,6 +49,7 @@ MML=NOTE /REST
     /VOLUME
     /STACCATO
     /TRANSPOSE
+    /REPEAT
     /TRACK_SEPARATOR
 NOTE=_ pitch:PITCH length:INTEGER? dot:"."* _ {
       isNewLineTop = false;
@@ -149,6 +150,19 @@ TRANSPOSE=_ "kt" minus:MINUS? integer:INTEGER? _ {
           minus ??= "";
           integer ??= 0;
           return `[K:transpose=${minus}${integer}]\n`; }
+REPEAT=_ "[" head:MML* "|"? tail:MML* "]" r:INTEGER? _ {
+  head = head.join('');
+  tail = tail.join('');
+  r ??= 2;
+  let result = "";
+  for (let i = 0; i < r; i++) {
+    if (i == r - 1) {
+      result += head;
+    } else {
+      result += head + tail;
+    }
+  }
+  return result; }
 TRACK_SEPARATOR=_ ";" _ {
                 track++;
                 let prefix = isNewLineTop ? "" : "\n";

@@ -208,6 +208,16 @@ describe("mml2abc", () => {
     test("key transpose", () => {
         expect(parse("l8 c kt7; c")).toEqual(prefix + 'C[K:transpose=7]\nV:2\nC');
     });
-
-    // FIXME repeat l8[c] to CC
+    test("repeat", () => {
+        expect(parse("l8[c]")).toEqual(prefix + 'CC');
+    });
+    test("repeat", () => {
+        expect(parse("l8[c|[d|e]]3")).toEqual(prefix + 'CDEDCDEDC');
+    });
+    test("repeat", () => {
+        expect(parse("l8[cc]")).toEqual(prefix + 'CCCC');
+    });
+    test("repeat", () => {
+        expect(parse("l8[c<c]")).toEqual(prefix + 'CcCc');
+    });
 });
