@@ -50,6 +50,7 @@ MML=NOTE /REST
     /STACCATO
     /TRANSPOSE
     /REPEAT
+    /BAR
     /TRACK_SEPARATOR
 NOTE=_ pitch:PITCH length:INTEGER? dot:"."* _ {
       isNewLineTop = false;
@@ -163,6 +164,7 @@ REPEAT=_ "[" head:MML* "|"? tail:MML* "]" r:INTEGER? _ {
     }
   }
   return result; }
+BAR= _ "/*|*/" _ { return "|"; }
 TRACK_SEPARATOR=_ ";" _ {
                 track++;
                 let prefix = isNewLineTop ? "" : "\n";

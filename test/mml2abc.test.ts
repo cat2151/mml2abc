@@ -220,4 +220,7 @@ describe("mml2abc", () => {
     test("repeat", () => {
         expect(parse("l8[c<c]")).toEqual(prefix + 'CcCc');
     });
+    test("bar", () => {
+        expect(parse("/*|*/")).toEqual(prefix + '|');
+    });
 });
