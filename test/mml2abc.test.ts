@@ -223,4 +223,11 @@ describe("mml2abc", () => {
     test("bar", () => {
         expect(parse("/*|*/")).toEqual(prefix + '|');
     });
+    test("臨時記号。ABCは臨時記号が小節内で維持される。五線譜と同じ。MMLとは違う。そこを対策する用", () => {
+        expect(parse("l8c+c")).toEqual(prefix + '^C=C');
+    });
+    test("臨時記号", () => {
+        expect(parse("l8f+f+fff+f+d+dd+g-g-ggg-g-")).toEqual(prefix + '^F^F=FF^F^F^D=D^D_G_G=GG_G_G');
+    });
+
 });

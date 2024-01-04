@@ -28,6 +28,10 @@
     if (denominator == 1) denominator = "";
     return {numerator, denominator};
   }
+  function updateSharpFlats(pitch, sharp, flat, sharpFlats) {
+    let iPitch = "abcdefg".indexOf(pitch);
+    sharpFlats[iPitch] = sharp.length - flat.length;
+  }
 }}
 {
   let track = 1;
@@ -38,6 +42,7 @@
   let chordOctave = null;
   let chordAbcNoteLength = null;
   let isStaccato = false;
+  let sharpFlats = [0,0,0,0,0,0,0]; // 並びはabcdefg
 }
 MMLs=mmls:MML* { return "V:1\n" + mmls.join(''); }
 MML=NOTE /REST
@@ -172,7 +177,17 @@ TRACK_SEPARATOR=_ ";" _ {
                 return `${prefix}V:${track}\n`; }
 
 PITCH=pitch:[a-g] sharp:SHARP* flat:FLAT* {
-      pitch = sharp.join('') + flat.join('') + pitch;
+      // sharp, flat, natural
+      const oldSharpFlat = sharpFlats["abcdefg".indexOf(pitch)];
+      updateSharpFlats(pitch, sharp, flat, sharpFlats);
+      const isNatural = (!sharp.length) && (!flat.length);
+      if (isNatural && oldSharpFlat) {
+        pitch = "=" + pitch; // こうしないと前回の臨時記号が適用されるので（五線譜と同じ）
+      } else {
+        pitch = sharp.join('') + flat.join('') + pitch;
+      }
+
+      // octave
       switch (octave) {
         case  0: return pitch.toUpperCase() + ',,,,,';
         case  1: return pitch.toUpperCase() + ',,,,';
