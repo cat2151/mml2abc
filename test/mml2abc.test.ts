@@ -229,5 +229,11 @@ describe("mml2abc", () => {
     test("臨時記号", () => {
         expect(parse("l8f+f+fff+f+d+dd+g-g-ggg-g-")).toEqual(prefix + '^F^F=FF^F^F^D=D^D_G_G=GG_G_G');
     });
+    test("inline abc", () => {
+        expect(parse("l8cde/*FGA*/")).toEqual(prefix + 'CDEFGA');
+    });
+    test("inline abc comment", () => {
+        expect(parse("/*[r:comment]*/")).toEqual(prefix + '[r:comment]');
+    });
 
 });

@@ -55,7 +55,7 @@ MML=NOTE /REST
     /STACCATO
     /TRANSPOSE
     /REPEAT
-    /BAR
+    /INLINE_ABC
     /TRACK_SEPARATOR
 NOTE=_ pitch:PITCH length:INTEGER? dot:"."* _ {
       isNewLineTop = false;
@@ -169,7 +169,9 @@ REPEAT=_ "[" head:MML* "|"? tail:MML* "]" r:INTEGER? _ {
     }
   }
   return result; }
-BAR= _ "/*|*/" _ { return "|"; }
+INLINE_ABC= "/*" abc:[^*/]+ "*/" { return abc.join(""); }
+  // ↑ 問題、*と/を含むことができない。適切な書き方があるか把握できていない。対策、ひとまず試して様子見する
+  // ↑ コメントを書くには、ABC側のコメントとして /*[r:ここにコメントを書く]*/ のように書く
 TRACK_SEPARATOR=_ ";" _ {
                 track++;
                 let prefix = isNewLineTop ? "" : "\n";
