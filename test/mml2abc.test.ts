@@ -1,6 +1,6 @@
 import { parse } from "../src/mml2abc.commonjs.js";
 describe("mml2abc", () => {
-    const prefix = "V:1\n";
+    const prefix = "V:1\n[Q:120]";
     test("note , pitch", () => {
         expect(parse("c")).toEqual(prefix + "C2");
     });

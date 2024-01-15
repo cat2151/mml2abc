@@ -44,7 +44,7 @@
   let isStaccato = false;
   let sharpFlats = [0,0,0,0,0,0,0]; // 並びはabcdefg
 }
-MMLs=mmls:MML* { return "V:1\n" + mmls.join(''); }
+MMLs=mmls:MML* { return "V:1\n[Q:120]" + mmls.join(''); }
 MML=NOTE /REST
     /OCTAVE /OCTAVE_UP /OCTAVE_DOWN
     /NOTE_LENGTH
