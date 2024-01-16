@@ -1,6 +1,7 @@
 import { parse } from "../src/mml2abc.commonjs.js";
 describe("mml2abc", () => {
     const prefix = "V:1\n[Q:120]";
+    const prefixNewTrack = "[I:MIDI program 0]\n!ffff!\n";
     test("note , pitch", () => {
         expect(parse("c")).toEqual(prefix + "C2");
     });
@@ -167,10 +168,10 @@ describe("mml2abc", () => {
         //  program changeに失敗して V:1のprogram changeが使われてしまう。
         //  例： [V:1][I:MIDI program 18]C4[V:2][I:MIDI program 0]z4E4
         //  このため、改行を使う形式で対処した。
-        expect(parse("g1; @38 o3c1")).toEqual(prefix + "G8\nV:2\n[I:MIDI program 38]C,,8");
+        expect(parse("g1; @38 o3c1")).toEqual(prefix + "G8\nV:2\n" + prefixNewTrack + "[I:MIDI program 38]C,,8");
     });
     test("TRACK_SEPARATOR", () => {
-        expect(parse("c;e;g")).toEqual(prefix + "C2\nV:2\nE2\nV:3\nG2");
+        expect(parse("c;e;g")).toEqual(prefix + "C2\nV:2\n" + prefixNewTrack + "E2\nV:3\n" + prefixNewTrack + "G2");
     });
     test("tempo BPM", () => {
         expect(parse("l8t60cdeft150gfed")).toEqual(prefix + "[Q:60]CDEF[Q:150]GFED");
@@ -179,10 +180,10 @@ describe("mml2abc", () => {
         expect(parse("l8t150cdeftgfed")).toEqual(prefix + "[Q:150]CDEF[Q:120]GFED");
     });
     test("MML volume to ABC MIDI velocity", () => { // abcjs not recognized "%%MIDI control 7 50"
-        expect(parse("l8 v8 c")).toEqual(prefix + "!mp!C");
+        expect(parse("l8 v8 c")).toEqual(prefix + "!mp!\nC");
     });
     test("MML volume to ABC MIDI velocity", () => {
-        expect(parse("l8 vc v16c v0c")).toEqual(prefix + "!ffff!C!ffff!C!pppp!C");
+        expect(parse("l8 vc v16c v0c")).toEqual(prefix + "!ffff!\nC!ffff!\nC!pppp!\nC");
     });
     test("MML q4 to ABC staccato", () => { // abc は staccato はあるが、それよりも細かいnote offタイミング制御はない
         expect(parse("l8 c q4 c")).toEqual(prefix + "C.C");
@@ -206,7 +207,7 @@ describe("mml2abc", () => {
         expect(parse("l8 kt-2 c")).toEqual(prefix + '[K:transpose=-2]\nC');
     });
     test("key transpose", () => {
-        expect(parse("l8 c kt7; c")).toEqual(prefix + 'C[K:transpose=7]\nV:2\nC');
+        expect(parse("l8 c kt7; l8c")).toEqual(prefix + 'C[K:transpose=7]\nV:2\n' + prefixNewTrack + 'C');
     });
     test("repeat", () => {
         expect(parse("l8[c]")).toEqual(prefix + 'CC');

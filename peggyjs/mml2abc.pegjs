@@ -35,14 +35,25 @@
 }}
 {
   let track = 1;
-  let isNewLineTop = true;
 
-  let octave = defaultOctave;
-  let mmlNoteLength = defaultMmlNoteLength;
-  let chordOctave = null;
-  let chordAbcNoteLength = null;
-  let isStaccato = false;
-  let sharpFlats = [0,0,0,0,0,0,0]; // 並びはabcdefg
+  let isNewLineTop;
+  let octave;
+  let mmlNoteLength;
+  let chordOctave;
+  let chordAbcNoteLength;
+  let isStaccato;
+  let sharpFlats;
+  initTrackParams();
+
+  function initTrackParams() {
+    isNewLineTop = true;
+    octave = defaultOctave;
+    mmlNoteLength = defaultMmlNoteLength;
+    chordOctave = null;
+    chordAbcNoteLength = null;
+    isStaccato = false;
+    sharpFlats = [0,0,0,0,0,0,0]; // 並びはabcdefg
+  }
 }
 MMLs=mmls:MML* { return "V:1\n[Q:120]" + mmls.join(''); }
 MML=NOTE /REST
@@ -106,31 +117,32 @@ TEMPO=_ "t" integer:INTEGER? _ {
       isNewLineTop = false;
       return `[Q:${integer ?? defaultTempo}]`; }
 VOLUME=_ "v" integer:INTEGER? _ {
-  isNewLineTop = false;
+  isNewLineTop = true;
   integer ??= defaultMmlVolume;
   if (integer >= 16) {
-    return "!ffff!";
+    return "!ffff!\n";
   } else {
+    // 改行を入れないと、abcjsが正常に演奏しないことがある
     switch (integer) {
-      case 15: return "!fff!";
-      case 14: return "!ff!";
-      case 13: return "!f!";
-      case 12: return "!f!";
-      case 11: return "!mf!";
-      case 10: return "!mf!";
-      case  9: return "!mp!";
-      case  8: return "!mp!";
-      case  7: return "!p!";
-      case  6: return "!p!";
-      case  5: return "!pp!";
-      case  4: return "!pp!";
-      case  3: return "!ppp!";
-      case  2: return "!ppp!";
-      case  1: return "!pppp!";
-      case  0: return "!pppp!";
+      case 15: return "!fff!\n";
+      case 14: return "!ff!\n";
+      case 13: return "!f!\n";
+      case 12: return "!f!\n";
+      case 11: return "!mf!\n";
+      case 10: return "!mf!\n";
+      case  9: return "!mp!\n";
+      case  8: return "!mp!\n";
+      case  7: return "!p!\n";
+      case  6: return "!p!\n";
+      case  5: return "!pp!\n";
+      case  4: return "!pp!\n";
+      case  3: return "!ppp!\n";
+      case  2: return "!ppp!\n";
+      case  1: return "!pppp!\n";
+      case  0: return "!pppp!\n";
       default:
           console.assert(false, "FIXME assert(0 <= integer && integer <= 32)");
-          return "!ffff!";
+          return "!ffff!\n";
     }
   }
 }
@@ -175,8 +187,16 @@ INLINE_ABC= "/*" abc:[^*/]+ "*/" { return abc.join(""); }
 TRACK_SEPARATOR=_ ";" _ {
                 track++;
                 let prefix = isNewLineTop ? "" : "\n";
-                isNewLineTop = true;
-                return `${prefix}V:${track}\n`; }
+                // MMLのスタンダードな仕様を継承し、新trackは @, v, l 等を初期化する
+                initTrackParams();
+                // abcjsは、新trackは前trackの @, v を引き継ぐ。
+                // それをMMLのスタンダードにあわせるため、明示的に @, v を指定する。
+                // これにより、例えば旧trackで @1 pppp が指定されていても、
+                // 新trackは @0 ffff でスタートできる。
+                // なおffffがデフォルトなのはSiONのデフォルトが音量最大であるため。ここはSiONの仕様をシンプルに踏襲することを優先する。
+                // また、abcjsはffffがデフォルトのようである（根拠は、取り急ぎ聴いて確認したイメージ）。
+                // !ffff!のあとの改行は、ないと異常な演奏となったのでひとまず対策用。V:のあとも同様。挙動のクセがabcjs側のupdateで変更する可能性もあるため、このようにrawでabcjsを書く場所は、無難に改行を入れておくとする。
+                return `${prefix}V:${track}\n[I:MIDI program 0]\n!ffff!\n`; }
 
 PITCH=pitch:[a-g] sharp:SHARP* flat:FLAT* {
       // sharp, flat, natural
