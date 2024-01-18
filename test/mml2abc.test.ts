@@ -1,7 +1,9 @@
 import { parse } from "../src/mml2abc.commonjs.js";
 describe("mml2abc", () => {
-    const prefix = "V:1\n[Q:120]";
-    const prefixNewTrack = "[I:MIDI program 0]\n!ffff!\n";
+    const prefix = "V:1\n[Q:120]!ffff!";
+    const prefixNoneNoteStart = "V:1\n[Q:120]"; // MML先頭がnoteや休符や音符でない場合用
+    const prefixNewTrack = "[I:MIDI program 0]\n!ffff!";
+    const prefixNewTrackNoneNoteStart = "[I:MIDI program 0]\n";
     test("note , pitch", () => {
         expect(parse("c")).toEqual(prefix + "C2");
     });
@@ -157,10 +159,10 @@ describe("mml2abc", () => {
         expect(parse("l8 c--")).toEqual(prefix + "__C");
     });
     test("MIDI Program Change", () => {
-        expect(parse("@0 c")).toEqual(prefix + "[I:MIDI program 0]C2");
+        expect(parse("@1 c")).toEqual(prefixNoneNoteStart + "[I:MIDI program 1]!ffff!C2");
     });
     test("MIDI Program Change", () => {
-        expect(parse("@0 c @4 e")).toEqual(prefix + "[I:MIDI program 0]C2[I:MIDI program 4]E2");
+        expect(parse("@1 c @4 e")).toEqual(prefixNoneNoteStart + "[I:MIDI program 1]!ffff!C2[I:MIDI program 4]E2");
     });
     test("TRACK_SEPARATOR", () => {
         // abcjs issues候補:
@@ -168,28 +170,28 @@ describe("mml2abc", () => {
         //  program changeに失敗して V:1のprogram changeが使われてしまう。
         //  例： [V:1][I:MIDI program 18]C4[V:2][I:MIDI program 0]z4E4
         //  このため、改行を使う形式で対処した。
-        expect(parse("g1; @38 o3c1")).toEqual(prefix + "G8\nV:2\n" + prefixNewTrack + "[I:MIDI program 38]C,,8");
+        expect(parse("g1; @38 o3c1")).toEqual(prefix + "G8\nV:2\n" + prefixNewTrackNoneNoteStart + "[I:MIDI program 38]!ffff!C,,8");
     });
     test("TRACK_SEPARATOR", () => {
         expect(parse("c;e;g")).toEqual(prefix + "C2\nV:2\n" + prefixNewTrack + "E2\nV:3\n" + prefixNewTrack + "G2");
     });
     test("tempo BPM", () => {
-        expect(parse("l8t60cdeft150gfed")).toEqual(prefix + "[Q:60]CDEF[Q:150]GFED");
+        expect(parse("l8t60cdeft150gfed")).toEqual(prefixNoneNoteStart + "[Q:60]!ffff!CDEF[Q:150]GFED");
     });
     test("tempo BPM default", () => {
-        expect(parse("l8t150cdeftgfed")).toEqual(prefix + "[Q:150]CDEF[Q:120]GFED");
+        expect(parse("l8t150cdeftgfed")).toEqual(prefixNoneNoteStart + "[Q:150]!ffff!CDEF[Q:120]GFED");
     });
     test("MML volume to ABC MIDI velocity", () => { // abcjs not recognized "%%MIDI control 7 50"
-        expect(parse("l8 v8 c")).toEqual(prefix + "!mp!\nC");
+        expect(parse("l8 v8 c")).toEqual(prefixNoneNoteStart + "!mp!C");
     });
     test("MML volume to ABC MIDI velocity", () => {
-        expect(parse("l8 vc v16c v0c")).toEqual(prefix + "!ffff!\nC!ffff!\nC!pppp!\nC");
+        expect(parse("l8 vc v16c v0c")).toEqual(prefix + "C!ffff!C!pppp!C");
     });
     test("MML q4 to ABC staccato", () => { // abc は staccato はあるが、それよりも細かいnote offタイミング制御はない
         expect(parse("l8 c q4 c")).toEqual(prefix + "C.C");
     });
     test("key transpose", () => {
-        expect(parse("l8 kt2 c")).toEqual(prefix + '[K:transpose=2]\nC');
+        expect(parse("l8 kt2 c")).toEqual(prefixNoneNoteStart + '[K:transpose=2]\n!ffff!C');
         // transposeは五線譜に影響しない。イメージは移調楽器。
         // abcjs issues候補:
         //  abcjsは 前後いずれかに改行がないとtransposeが有効にならない。
@@ -204,25 +206,25 @@ describe("mml2abc", () => {
         //      対処方法不明。
     });
     test("key transpose", () => {
-        expect(parse("l8 kt-2 c")).toEqual(prefix + '[K:transpose=-2]\nC');
+        expect(parse("l8 kt-2 c")).toEqual(prefixNoneNoteStart + '[K:transpose=-2]\n!ffff!C');
     });
     test("key transpose", () => {
         expect(parse("l8 c kt7; l8c")).toEqual(prefix + 'C[K:transpose=7]\nV:2\n' + prefixNewTrack + 'C');
     });
     test("repeat", () => {
-        expect(parse("l8[c]")).toEqual(prefix + 'CC');
+        expect(parse("l8[c]")).toEqual(prefix + 'C!ffff!C');
     });
     test("repeat", () => {
-        expect(parse("l8[c|[d|e]]3")).toEqual(prefix + 'CDEDCDEDC');
+        expect(parse("l8[c|[d|e]]3")).toEqual(prefix + 'CDED!ffff!CDED!ffff!C');
     });
     test("repeat", () => {
-        expect(parse("l8[cc]")).toEqual(prefix + 'CCCC');
+        expect(parse("l8[cc]")).toEqual(prefix + 'CC!ffff!CC');
     });
     test("repeat", () => {
-        expect(parse("l8[c<c]")).toEqual(prefix + 'CcCc');
+        expect(parse("l8[c<c]")).toEqual(prefix + 'Cc!ffff!Cc');
     });
     test("bar", () => {
-        expect(parse("/*|*/")).toEqual(prefix + '|');
+        expect(parse("/*|*/")).toEqual(prefixNoneNoteStart + '|');
     });
     test("臨時記号。ABCは臨時記号が小節内で維持される。五線譜と同じ。MMLとは違う。そこを対策する用", () => {
         expect(parse("l8c+c")).toEqual(prefix + '^C=C');
@@ -234,7 +236,7 @@ describe("mml2abc", () => {
         expect(parse("l8cde/*FGA*/")).toEqual(prefix + 'CDEFGA');
     });
     test("inline abc comment", () => {
-        expect(parse("/*[r:comment]*/")).toEqual(prefix + '[r:comment]');
+        expect(parse("/*[r:comment]*/")).toEqual(prefixNoneNoteStart + '[r:comment]');
     });
 
 });

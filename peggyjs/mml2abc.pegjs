@@ -37,6 +37,8 @@
   let track = 1;
 
   let isNewLineTop;
+  let isVolumeBeforeNote;
+  let volume;
   let octave;
   let mmlNoteLength;
   let chordOctave;
@@ -47,12 +49,52 @@
 
   function initTrackParams() {
     isNewLineTop = true;
+    isVolumeBeforeNote = true;
+    volume = defaultMmlVolume;
     octave = defaultOctave;
     mmlNoteLength = defaultMmlNoteLength;
     chordOctave = null;
     chordAbcNoteLength = null;
     isStaccato = false;
     sharpFlats = [0,0,0,0,0,0,0]; // 並びはabcdefg
+  }
+
+  function insertVolumeBeforeNoteOrRest(abc) {
+    // 音符と休符とchordで共通処理にするため関数化した
+    if (isVolumeBeforeNote) {
+      // abcjsの音量指定の挙動に対応する用。音符と休符とchordの直前に音量指定を持ってくる必要がある。そうしないと音量指定が反映されない。
+      abc = volume2abc(volume) + abc;
+      isVolumeBeforeNote = false;
+    }
+    return abc;
+  }
+
+  function volume2abc(integer) {
+    if (integer >= 16) {
+      return "!ffff!";
+    } else {
+      switch (integer) {
+        case 15: return "!fff!";
+        case 14: return "!ff!";
+        case 13: return "!f!";
+        case 12: return "!f!";
+        case 11: return "!mf!";
+        case 10: return "!mf!";
+        case  9: return "!mp!";
+        case  8: return "!mp!";
+        case  7: return "!p!";
+        case  6: return "!p!";
+        case  5: return "!pp!";
+        case  4: return "!pp!";
+        case  3: return "!ppp!";
+        case  2: return "!ppp!";
+        case  1: return "!pppp!";
+        case  0: return "!pppp!";
+        default:
+          console.assert(false, "FIXME assert(0 <= integer && integer <= 32)");
+          return "!ffff!";
+      }
+    }
   }
 }
 MMLs=mmls:MML* { return "V:1\n[Q:120]" + mmls.join(''); }
@@ -70,6 +112,7 @@ MML=NOTE /REST
     /TRACK_SEPARATOR
 NOTE=_ pitch:PITCH length:INTEGER? dot:"."* _ {
       isNewLineTop = false;
+      pitch = insertVolumeBeforeNoteOrRest(pitch);
       if (isStaccato) pitch = "." + pitch;
       const abcLength = getNoteLengthAbc(length ?? mmlNoteLength, dot.length);
       if (chordOctave !== null) {
@@ -84,8 +127,10 @@ NOTE=_ pitch:PITCH length:INTEGER? dot:"."* _ {
       } }
 REST=_ "r" length:INTEGER? dot:"."*_ {
       isNewLineTop = false;
+      let rest = 'z';
+      rest = insertVolumeBeforeNoteOrRest(rest);
       const abcLength = getNoteLengthAbc(length ?? mmlNoteLength, dot.length);
-      return 'z' + abcLength; }
+      return rest + abcLength; }
 OCTAVE=_ "o" integer:INTEGER? _ {
         isNewLineTop = false;
         octave = integer ?? defaultOctave; }
@@ -103,7 +148,9 @@ CHORD=_ "'" ","? INTEGER? ","? INTEGER? _ {
       if (chordOctave === null) {
         chordOctave = octave;
         chordAbcNoteLength = null;
-        return "[";
+        let abc = "[";
+        abc = insertVolumeBeforeNoteOrRest(abc);
+        return abc;
       } else {
         octave = chordOctave;
         chordOctave = null;
@@ -117,34 +164,10 @@ TEMPO=_ "t" integer:INTEGER? _ {
       isNewLineTop = false;
       return `[Q:${integer ?? defaultTempo}]`; }
 VOLUME=_ "v" integer:INTEGER? _ {
-  isNewLineTop = true;
+  isNewLineTop = false;
+  isVolumeBeforeNote = true;
   integer ??= defaultMmlVolume;
-  if (integer >= 16) {
-    return "!ffff!\n";
-  } else {
-    // 改行を入れないと、abcjsが正常に演奏しないことがある
-    switch (integer) {
-      case 15: return "!fff!\n";
-      case 14: return "!ff!\n";
-      case 13: return "!f!\n";
-      case 12: return "!f!\n";
-      case 11: return "!mf!\n";
-      case 10: return "!mf!\n";
-      case  9: return "!mp!\n";
-      case  8: return "!mp!\n";
-      case  7: return "!p!\n";
-      case  6: return "!p!\n";
-      case  5: return "!pp!\n";
-      case  4: return "!pp!\n";
-      case  3: return "!ppp!\n";
-      case  2: return "!ppp!\n";
-      case  1: return "!pppp!\n";
-      case  0: return "!pppp!\n";
-      default:
-          console.assert(false, "FIXME assert(0 <= integer && integer <= 32)");
-          return "!ffff!\n";
-    }
-  }
+  volume = integer;
 }
 STACCATO=_ "q" integer:INTEGER? _ {
   isNewLineTop = false;
@@ -189,14 +212,17 @@ TRACK_SEPARATOR=_ ";" _ {
                 let prefix = isNewLineTop ? "" : "\n";
                 // MMLのスタンダードな仕様を継承し、新trackは @, v, l 等を初期化する
                 initTrackParams();
-                // abcjsは、新trackは前trackの @, v を引き継ぐ。
-                // それをMMLのスタンダードにあわせるため、明示的に @, v を指定する。
-                // これにより、例えば旧trackで @1 pppp が指定されていても、
-                // 新trackは @0 ffff でスタートできる。
-                // なおffffがデフォルトなのはSiONのデフォルトが音量最大であるため。ここはSiONの仕様をシンプルに踏襲することを優先する。
-                // また、abcjsはffffがデフォルトのようである（根拠は、取り急ぎ聴いて確認したイメージ）。
-                // !ffff!のあとの改行は、ないと異常な演奏となったのでひとまず対策用。V:のあとも同様。挙動のクセがabcjs側のupdateで変更する可能性もあるため、このようにrawでabcjsを書く場所は、無難に改行を入れておくとする。
-                return `${prefix}V:${track}\n[I:MIDI program 0]\n!ffff!\n`; }
+                // abcjsは、
+                //    新trackは前trackの @, v を引き継ぐ。
+                //    !ffff!等の音量指定のあとに音符以外の改行やMIDI program changeを入れると音量指定が無効となってしまう。音量指定のあとに音符を入れてから改行等をすると音量が継続される。
+                // mmlabc仕様は、
+                //    新trackは、@, v 等はリセットとする。
+                //    例えば旧trackで @1 v0 が指定されていても、
+                //      新trackはmml2abcデフォルトの @0 v16 でスタートとする。
+                //    これを実現するため、@ はtrack先頭に挿入する。
+                //      v は最初の音符までステートとしてvを保持し、最初の音符直前にvを挿入して対処とする。複雑だが、やむなし。
+                // 課題、こういったabcjsの想定外の挙動は、想定よりコストがかかる。なぜならTDDのスコープ外で、手動でabcで実際に鳴らしてのコストのかかるテストが必要となるため。ひとまず開発を進めて様子見する。
+                return `${prefix}V:${track}\n[I:MIDI program 0]\n`; }
 
 PITCH=pitch:[a-g] sharp:SHARP* flat:FLAT* {
       // sharp, flat, natural
