@@ -263,7 +263,7 @@ function peg$parse(input, options) {
   var peg$e24 = peg$otherExpectation("whitespace");
   var peg$e25 = peg$classExpectation([" ", "\t", "\n", "\r"], false, false);
 
-  var peg$f0 = function(mmls) { return "V:1\n[Q:120]" + mmls.join(''); };
+  var peg$f0 = function(mmls) { return createAbc(mmls.join('')); };
   var peg$f1 = function(pitch, length, dot) {
       isNewLineTop = false;
       pitch = insertVolumeBeforeNoteOrRest(pitch);
@@ -1383,6 +1383,11 @@ function peg$parse(input, options) {
           return "!ffff!";
       }
     }
+  }
+  function createAbc(mml) {
+    const tempo = 120;
+    let abc = `V:1\n[Q:${tempo}]` + mml;
+    return abc;
   }
 
   peg$result = peg$startRuleFunction();

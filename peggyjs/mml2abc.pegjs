@@ -96,8 +96,13 @@
       }
     }
   }
+  function createAbc(mml) {
+    const tempo = 120;
+    let abc = `V:1\n[Q:${tempo}]` + mml;
+    return abc;
+  }
 }
-MMLs=mmls:MML* { return "V:1\n[Q:120]" + mmls.join(''); }
+MMLs=mmls:MML* { return createAbc(mmls.join('')); }
 MML=NOTE /REST
     /OCTAVE /OCTAVE_UP /OCTAVE_DOWN
     /NOTE_LENGTH
