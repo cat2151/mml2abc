@@ -1,9 +1,9 @@
 import { parse } from "../src/mml2abc.commonjs.js";
 describe("mml2abc", () => {
-    const prefix = "V:1\n[Q:120]!ffff!";
     const prefixNoneNoteStart = "V:1\n[Q:120]"; // MML先頭がnoteや休符や音符でない場合用
-    const prefixNewTrack = "[I:MIDI program 0]\n!ffff!";
+    const prefix = prefixNoneNoteStart + "!ffff!";
     const prefixNewTrackNoneNoteStart = "[I:MIDI program 0]\n";
+    const prefixNewTrack = prefixNewTrackNoneNoteStart + "!ffff!";
     test("note , pitch", () => {
         expect(parse("c")).toEqual(prefix + "C2");
     });
@@ -237,6 +237,12 @@ describe("mml2abc", () => {
     });
     test("inline abc comment", () => {
         expect(parse("/*[r:comment]*/")).toEqual(prefixNoneNoteStart + '[r:comment]');
+    });
+    test("time shift", () => {
+        expect(parse("!!")).toEqual("V:1\n[Q:99999][Q:120]");
+    });
+    test("time shift", () => {
+        expect(parse("t150!!")).toEqual("V:1\n[Q:99999][Q:150]");
     });
 
 });

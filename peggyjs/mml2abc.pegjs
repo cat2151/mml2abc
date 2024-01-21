@@ -35,6 +35,9 @@
 }}
 {
   let track = 1;
+  let isTimeShift = false;
+  let tempo = defaultTempo;
+  let timeShiftTempo = defaultTempo;
 
   let isNewLineTop;
   let isVolumeBeforeNote;
@@ -96,9 +99,23 @@
       }
     }
   }
+
   function createAbc(mml) {
-    const tempo = 120;
-    let abc = `V:1\n[Q:${tempo}]` + mml;
+    let abcTempo = `[Q:${defaultTempo}]`
+    if (isTimeShift) {
+      abcTempo = "!begin time shift!"
+    }
+    let abc = `V:1\n${abcTempo}` + mml;
+    abc = postProcess(abc);
+    return abc;
+  }
+
+  function postProcess(abc) {
+    if (isTimeShift) {
+      abc = abc.replace(/\[Q:\d+\]/g, "");
+      abc = abc.replace(/!begin time shift!/g, `[Q:99999]`);
+      abc = abc.replace(/!end time shift!/g, `[Q:${timeShiftTempo}]`);
+    }
     return abc;
   }
 }
@@ -114,6 +131,7 @@ MML=NOTE /REST
     /TRANSPOSE
     /REPEAT
     /INLINE_ABC
+    /TIME_SHIFT
     /TRACK_SEPARATOR
 NOTE=_ pitch:PITCH length:INTEGER? dot:"."* _ {
       isNewLineTop = false;
@@ -167,7 +185,8 @@ PROGRAM_CHANGE=_ "@" integer:INTEGER _ {
               return `[I:MIDI program ${integer}]`; }
 TEMPO=_ "t" integer:INTEGER? _ {
       isNewLineTop = false;
-      return `[Q:${integer ?? defaultTempo}]`; }
+      tempo = integer ?? defaultTempo;
+      return `[Q:${tempo}]`; }
 VOLUME=_ "v" integer:INTEGER? _ {
   isNewLineTop = false;
   isVolumeBeforeNote = true;
@@ -212,6 +231,10 @@ REPEAT=_ "[" head:MML* "|"? tail:MML* "]" r:INTEGER? _ {
 INLINE_ABC= "/*" abc:[^*/]+ "*/" { return abc.join(""); }
   // ↑ 問題、*と/を含むことができない。適切な書き方があるか把握できていない。対策、ひとまず試して様子見する
   // ↑ コメントを書くには、ABC側のコメントとして /*[r:ここにコメントを書く]*/ のように書く
+TIME_SHIFT=_ "!!" _ {
+    isTimeShift = true;
+    timeShiftTempo = tempo;
+    return "!end time shift!"; }
 TRACK_SEPARATOR=_ ";" _ {
                 track++;
                 let prefix = isNewLineTop ? "" : "\n";
