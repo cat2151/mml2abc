@@ -32,9 +32,9 @@
     if (denominator == 1) denominator = "";
     return {numerator, denominator};
   }
-  function updateSharpFlats(pitch, sharp, flat, sharpFlats) {
+  function updateSharpFlats(octave, pitch, sharp, flat, sharpFlats) {
     let iPitch = "abcdefg".indexOf(pitch);
-    sharpFlats[iPitch] = sharp.length - flat.length;
+    sharpFlats[octave * 7 + iPitch] = sharp.length - flat.length;
   }
 
 function peg$subclass(child, parent) {
@@ -384,11 +384,11 @@ function peg$parse(input, options) {
                 return `${prefix}V:${track}\n[I:MIDI program 0]\n`; };
   var peg$f17 = function(pitch, sharp, flat) {
       // sharp, flat, natural
-      const oldSharpFlat = sharpFlats["abcdefg".indexOf(pitch)];
-      updateSharpFlats(pitch, sharp, flat, sharpFlats);
+      const oldSharpFlat = sharpFlats[octave * 7 + "abcdefg".indexOf(pitch)];
+      updateSharpFlats(octave, pitch, sharp, flat, sharpFlats);
       const isNatural = (!sharp.length) && (!flat.length);
       if (isNatural && oldSharpFlat) {
-        pitch = "=" + pitch; // こうしないと前回の臨時記号が適用されるので（五線譜と同じ）
+        pitch = "=" + pitch; // こうしないと、ABCは前回の臨時記号が適用されるので（五線譜と同じ）
       } else {
         pitch = sharp.join('') + flat.join('') + pitch;
       }
@@ -1381,7 +1381,7 @@ function peg$parse(input, options) {
     chordOctave = null;
     chordAbcNoteLength = null;
     isStaccato = false;
-    sharpFlats = [0,0,0,0,0,0,0]; // 並びはabcdefg
+    sharpFlats = new Array(/*abcdefg*/7 * /*octave 0～11*/12).fill(0);
   }
 
   function insertVolumeBeforeNoteOrRest(abc) {

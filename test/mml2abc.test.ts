@@ -232,6 +232,9 @@ describe("mml2abc", () => {
     test("臨時記号", () => {
         expect(parse("l8f+f+fff+f+d+dd+g-g-ggg-g-")).toEqual(prefix + '^F^F=FF^F^F^D=D^D_G_G=GG_G_G');
     });
+    test("臨時記号 octave。五線譜の臨時記号は、後続のnoteのうち条件を満たすものすべてに影響する。条件は同一小節内かつ同一octaveであること。MMLのsharp/flatは後続noteに影響しない。", () => {
+        expect(parse("l8c+<c>c")).toEqual(prefix + '^Cc=C');
+    });
     test("inline abc", () => {
         expect(parse("l8cde/*FGA*/")).toEqual(prefix + 'CDEFGA');
     });
