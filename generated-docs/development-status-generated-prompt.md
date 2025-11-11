@@ -1,4 +1,4 @@
-Last updated: 2025-11-11
+Last updated: 2025-11-12
 
 # 開発状況生成プロンプト（開発者向け）
 
@@ -222,6 +222,7 @@ Last updated: 2025-11-11
 
 ## 最近の変更（過去7日間）
 ### コミット履歴:
+1110a8b Update project summaries (overview & development status) [auto]
 423f310 Auto-translate README.ja.md to README.md [auto]
 8f7d560 ja
 2ab1b61 github-actionsリポジトリの共通ワークフローを導入
@@ -235,12 +236,15 @@ Last updated: 2025-11-11
 README.ja.md
 README.md
 _config.yml
-dist/index.html
 dist/mml2abc.mjs
+generated-docs/development-status-generated-prompt.md
+generated-docs/development-status.md
+generated-docs/project-overview-generated-prompt.md
+generated-docs/project-overview.md
 peggyjs/mml2abc.pegjs
 src/mml2abc.commonjs.js
 test/mml2abc.test.ts
 
 
 ---
-Generated at: 2025-11-11 09:25:57 JST
+Generated at: 2025-11-12 07:02:59 JST

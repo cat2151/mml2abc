@@ -1,38 +1,36 @@
-Last updated: 2025-11-11
+Last updated: 2025-11-12
 
 # Project Overview
 
 ## プロジェクト概要
-- Music Macro Language (MML) をABC music notationに変換するJavaScriptライブラリです。
-- 主にブラウザ環境やObsidianでMMLから手軽に五線譜表示と音楽再生を実現することを目的としています。
-- シンプルさと概念実証を重視し、`mmlabc`と呼ばれるMML方言（SiONサブセット）をサポートします。
+- MML（Music Macro Language）をABC記譜法に変換するJavaScriptライブラリです。
+- ブラウザ上でMMLの楽譜を生成し、音楽再生を可能にすることを目的としています。
+- 特に、ObsidianのようなノートアプリでMMLを使った音楽表現を実現することを目指しています。
 
 ## 技術スタック
 - フロントエンド:
-    - **abcjs**: (参照プロジェクト説明より) 本ライブラリが生成するABC music notationを利用し、ブラウザ上で五線譜を描画し、SoundFont GM音源ソフトシンセを鳴らすためのライブラリです。
-    - **HTML/JavaScript**: デモページの構築に利用され、ブラウザでの動作環境を提供します。
+  - **abcjs**: ブラウザで五線譜を描画し、SoundFont GM音源ソフトシンセを鳴らすためのライブラリ。生成されたABC記譜法を視覚化・再生する役割を担います。
+  - **webpack-dev-server**: 開発中にブラウザページをライブリロード（ホットリロード）し、リアルタイムでの確認を可能にします。
 - 音楽・オーディオ:
-    - **MML (Music Macro Language)**: 本ライブラリの入力となる音楽記述言語です。
-    - **ABC music notation**: 本ライブラリの出力となる音楽記述言語であり、abcjsなどで解釈・演奏されます。
-    - **mmlabc**: 本プロジェクトが定義するMMLの方言で、SiONのサブセットをベースにしています。
+  - **MML (Music Macro Language)**: 入力として使用される音楽記述言語。SiONおよびZ-MUSICのサブセットを方言として採用しています。
+  - **ABC music notation**: MMLから変換される出力形式。シンプルで読みやすい楽譜記述言語です。
 - 開発ツール:
-    - **TypeScript**: 型安全なJavaScript開発を可能にするための言語およびコンパイラです。
-    - **Peggy.js**: MMLパーサを自動生成するためのパーサジェネレータ（PEG文法定義からパーサを生成）です。
-    - **Node.js**: 開発環境の基盤として利用されます。
-    - **VSCode**: (参照プロジェクト説明より) 開発用IDEとして推奨されています。
+  - **Node.js**: JavaScript実行環境。開発時のビルド、テストスクリプト実行などに使用されます。
+  - **VSCode (Visual Studio Code)**: 開発環境として推奨されるエディタ。Jest拡張と連携し、テスト駆動開発を支援します。
 - テスト:
-    - **Jest**: JavaScriptコードのテストフレームワークです。
-    - **ts-jest**: JestでTypeScriptのテストを記述するためのプリセットです。
+  - **Jest**: JavaScriptのテストフレームワーク。MMLパーサーのTDD（テスト駆動開発）に使用され、コードの品質と正確性を保証します。
+  - **ts-jest**: JestがTypeScriptファイルを実行できるようにするためのトランスフォーマ。
 - ビルドツール:
-    - **Webpack**: JavaScriptモジュールをバンドルし、ブラウザで動作する形式にまとめるためのツールです。
-    - **webpack-dev-server**: 開発中にコードの変更を監視し、ブラウザの自動リロードを提供するローカル開発サーバーです。
+  - **peggy**: MMLの文法定義ファイル（`.pegjs`）から、MMLパーサーのJavaScriptコードを自動生成するパーサジェネレータ。
+  - **webpack**: プロジェクトのJavaScriptファイルをバンドルし、ブラウザで効率的に動作する形式に変換します。
 - 言語機能:
-    - **JavaScript (ES modules/CommonJS)**: ライブラリの主要な実装言語であり、異なるモジュール形式で出力されます。
+  - **JavaScript**: プロジェクトの主要なプログラミング言語。
+  - **TypeScript**: 静的型付けを導入し、開発効率とコードの信頼性を向上させるための言語。
 - 自動化・CI/CD:
-    - **chokidar-cli**: ファイルシステムの変更を監視し、自動ビルドやテスト実行などのタスクをトリガーするために使用されます。
-    - **npm-run-all**: 複数のnpmスクリプトを並列または直列に実行するためのユーティリティです。
+  - **chokidar-cli**: ファイルの変更を監視し、`peggy`によるパーサーの再生成やJestテストの自動実行をトリガーします。
+  - **npm-run-all**: 複数のnpmスクリプトを並行または直列で実行するためのツール。
 - 開発標準:
-    - **TDD (テスト駆動開発)**: (参照プロジェクト説明より) Jestを活用したテスト駆動開発を重視し、品質の高いコード開発を目指しています。
+  - **TypeScript**: 型安全性を提供し、コード品質の向上とエラーの早期発見に貢献します。
 
 ## ファイル階層ツリー
 ```
@@ -61,67 +59,96 @@ Last updated: 2025-11-11
 ```
 
 ## ファイル詳細説明
-- **`.gitignore`**: Gitがバージョン管理の対象外とするファイルやディレクトリを指定するファイルです。
-- **`LICENSE`**: プロジェクトのライセンス情報が記述されています。
-- **`README.ja.md`**: プロジェクトの概要、機能、使い方などを日本語で説明するファイルです。
-- **`README.md`**: プロジェクトの概要、機能、使い方などを英語で説明するファイルです。
-- **`_config.yml`**: GitHub Pagesの設定ファイルです。
-- **`dist/`**: ビルドされた成果物（デプロイ可能なファイル）が格納されるディレクトリです。
-    - **`dist/index.html`**: ブラウザでMML2ABCのデモを体験するためのHTMLファイルです。
-    - **`dist/main.js`**: `webpack`によってバンドルされた、ブラウザ向けJavaScriptコードです。
-    - **`dist/mml2abc.mjs`**: ES Modules形式で出力されたMML2ABCライブラリ本体のファイルです。
-- **`generated-docs/`**: (現状は空ですが) 自動生成されたドキュメントを格納するためのディレクトリです。
-- **`jest.config.js`**: JavaScriptテストフレームワークJestの設定ファイルです。
-- **`package-lock.json`**: `npm`が管理する依存パッケージの厳密なバージョンを記録するファイルです。
-- **`package.json`**: プロジェクトのメタデータ（名前、バージョン、スクリプト、依存関係など）を定義するファイルです。
-- **`peggyjs/`**: Peggy.jsの文法定義ファイルが格納されるディレクトリです。
-    - **`peggyjs/mml2abc.pegjs`**: MMLをABC music notationに変換するためのパーサの文法ルールを定義するファイルです。Peggy.jsがこのファイルからパーサコードを生成します。
+- **`.gitignore`**: Gitがバージョン管理の対象から除外するファイルやディレクトリを指定します。
+- **`LICENSE`**: プロジェクトの配布および使用に関するライセンス情報を提供します。
+- **`README.ja.md` / `README.md`**: プロジェクトの目的、機能、使用方法、開発手順などの概要を日本語と英語で記述したドキュメントです。
+- **`_config.yml`**: GitHub Pagesのビルド設定ファイルで、静的サイトの生成に利用されます。
+- **`dist/`**: プロジェクトのビルド成果物（ウェブブラウザで動作するファイル）が格納されるディレクトリです。
+  - **`dist/index.html`**: MML2ABCライブラリのデモページです。MMLを入力し、ABC記譜法に変換して表示・再生するウェブインターフェースを提供します。
+  - **`dist/main.js`**: webpackによってバンドルされた、ブラウザ向けのMML2ABCライブラリのJavaScriptコードです。
+  - **`dist/mml2abc.mjs`**: ES Modules形式で提供されるMML2ABCライブラリのJavaScriptコードです。
+- **`generated-docs/`**: ドキュメント生成ツールによって作成されたドキュメントが格納される予定のディレクトリです。
+- **`jest.config.js`**: Jestテストフレームワークの設定ファイルで、テストの実行方法や対象を指定します。
+- **`package-lock.json`**: `package.json`に記述された依存関係の厳密なバージョンと依存ツリーを記録し、複数環境での一貫した依存関係インストールを保証します。
+- **`package.json`**: プロジェクトのメタデータ（名前、バージョン、説明など）、依存関係、開発スクリプト（ビルド、テスト、監視など）を定義します。
+- **`peggyjs/`**: Peggy.jsのパーサー定義ファイルが格納されるディレクトリです。
+  - **`peggyjs/mml2abc.pegjs`**: Music Macro Language (MML) の文法規則を定義するファイルです。この定義に基づいて、MMLをABC記譜法に変換するパーサーが自動生成されます。
 - **`src/`**: プロジェクトのソースコードが格納されるディレクトリです。
-    - **`src/main.ts`**: TypeScriptのメインエントリポイントですが、現在のプロジェクト情報では内容が空です。
-    - **`src/mml2abc.commonjs.js`**: `peggyjs/mml2abc.pegjs`から生成されたMMLパーサと、CommonJS形式のJavaScriptコードが含まれています。主にNode.js環境でのテストや利用を想定しています。
+  - **`src/main.ts`**: プロジェクトのTypeScriptエントリポイントですが、現在のところ内容はほとんどありません。
+  - **`src/mml2abc.commonjs.js`**: `mml2abc.pegjs`からPeggy.jsによって自動生成された、MMLパーサーのCommonJS形式のJavaScriptコードです。MML文字列を解析し、ABC記譜法に変換する主要なロジックが含まれています。
 - **`test/`**: プロジェクトのテストコードが格納されるディレクトリです。
-    - **`test/mml2abc.test.ts`**: MMLパーサの変換ロジックが正しく機能するかを検証するためのTypeScript製のテストファイルです。
-- **`tsconfig.json`**: TypeScriptコンパイラの設定ファイルです。
-- **`webpack.config.js`**: Webpackのバンドル設定を定義するファイルです。ソースコードの入力から出力までの処理を制御します。
+  - **`test/mml2abc.test.ts`**: `mml2abc`パーサーの機能が期待通りに動作するかを検証するためのテストスイートです。TypeScriptで記述されています。
+- **`tsconfig.json`**: TypeScriptコンパイラの設定ファイルで、コンパイルオプション（出力ターゲット、モジュール解決方法など）を定義します。
+- **`webpack.config.js`**: webpackバンドラーの設定ファイルで、モジュールの解決、バンドルの方法、出力先などを定義します。
 
 ## 関数詳細説明
-このプロジェクトでは、主にMMLパーサのルールと、パーサが生成する中間表現からABC記譜法に変換するためのユーティリティ関数が中心です。
+このプロジェクトでは、主に`peggyjs/mml2abc.pegjs`で定義された文法規則と、それから自動生成される`src/mml2abc.commonjs.js`内のパーサー関連関数が中心となります。
 
--   **MMLs (peggyjs/mml2abc.pegjs)**: MML文字列全体の最上位の解析ルールです。複数のMMLコマンドやトラックをまとめて処理します。
--   **MML (peggyjs/mml2abc.pegjs)**: 個々のMMLコマンド（音符、休符、テンポ変更など）を解析するためのルールです。
--   **NOTE (peggyjs/mml2abc.pegjs)**: MMLの音符表現（例: `c`, `d#`, `e-`）を解析し、対応するABC記譜法の音符要素に変換します。
--   **REST (peggyjs/mml2abc.pegjs)**: MMLの休符表現（例: `r`）を解析し、ABC記譜法の休符要素に変換します。
--   **OCTAVE (peggyjs/mml2abc.pegjs)**: MMLのオクターブ指定（例: `o4`）を解析し、現在のオクターブ設定を更新します。
--   **OCTAVE_UP (peggyjs/mml2abc.pegjs)**: MMLのオクターブアップコマンド（例: `<`）を解析し、オクターブを一つ上げます。
--   **OCTAVE_DOWN (peggyjs/mml2abc.pegjs)**: MMLのオクターブダウンコマンド（例: `>`）を解析し、オクターブを一つ下げます。
--   **NOTE_LENGTH (peggyjs/mml2abc.pegjs)**: MMLの音符長指定（例: `l4`, `16`）を解析します。
--   **CHORD (peggyjs/mml2abc.pegjs)**: MMLの和音表現（例: `[ceg]`）を解析し、ABC記譜法の和音形式に変換します。
--   **PROGRAM_CHANGE (peggyjs/mml2abc.pegjs)**: MMLのプログラムチェンジコマンド（例: `@p10`）を解析し、楽器の変更を処理します。
--   **TEMPO (peggyjs/mml2abc.pegjs)**: MMLのテンポ指定（例: `t120`）を解析し、テンポ設定を更新します。
--   **VOLUME (peggyjs/mml2abc.pegjs)**: MMLのボリューム指定（例: `v100`）を解析し、音量設定を更新します。
--   **STACCATO (peggyjs/mml2abc.pegjs)**: MMLのスタッカート指定を解析します。
--   **TRANSPOSE (peggyjs/mml2abc.pegjs)**: MMLの移調コマンドを解析します。
--   **REPEAT (peggyjs/mml2abc.pegjs)**: MMLのリピートブロック（繰り返し）を解析します。
--   **INLINE_ABC (peggyjs/mml2abc.pegjs)**: MML中に直接ABC記譜法を埋め込む機能を解析します。
--   **TIME_SHIFT (peggyjs/mml2abc.pegjs)**: MMLのタイムシフト（時間調整）コマンドを解析します。
--   **TRACK_SEPARATOR (peggyjs/mml2abc.pegjs)**: 複数のMMLトラックを区切るコマンドを解析します。
--   **PITCH (peggyjs/mml2abc.pegjs)**: 音の高さ（C, D, Eなど）を解析します。
--   **SHARP (peggyjs/mml2abc.pegjs)**: シャープ記号（`+`または`#`）を解析します。
--   **FLAT (peggyjs/mml2abc.pegjs)**: フラット記号（`-`）を解析します。
--   **MINUS (peggyjs/mml2abc.pegjs)**: 負の数またはフラット記号を解析します。
--   **INTEGER (peggyjs/mml2abc.pegjs)**: 整数値を解析します。
--   **getNoteLengthAbc() (src/mml2abc.commonjs.js)**: MMLで指定された音符の長さを、ABC記譜法で表現可能な形式に変換するユーティリティ関数です。
--   **decimalToFraction() (src/mml2abc.commonjs.js)**: 小数を分数形式に変換するヘルパー関数です。
--   **updateSharpFlats() (src/mml2abc.commonjs.js)**: シャープやフラットなどの臨時記号を処理し、音符の正しいピッチを計算する関数です。
--   **peg$parseMMLs() / peg$parseMML() など (src/mml2abc.commonjs.js)**: Peggy.jsによって生成されるパーサの内部関数群で、`mml2abc.pegjs`で定義された各ルールに対応し、入力MML文字列を解析する役割を担います。
--   **initTrackParams() (src/mml2abc.commonjs.js)**: 新しいMMLトラックの解析を開始する際に、そのトラック固有のパラメータ（オクターブ、ボリュームなど）を初期状態にリセットする関数です。
--   **insertVolumeBeforeNoteOrRest() (src/mml2abc.commonjs.js)**: 音符や休符の前にボリューム設定を挿入し、ABC記譜法での音量制御を可能にする関数です。
--   **volume2abc() (src/mml2abc.commonjs.js)**: MMLのボリューム値をABC記譜法に対応する形式に変換する関数です。
--   **createAbc() (src/mml2abc.commonjs.js)**: 解析されたMML要素から最終的なABC記譜法文字列を組み立てる主要な関数です。
--   **postProcess() (src/mml2abc.commonjs.js)**: ABC記譜法文字列が生成された後、追加の整形や調整を行うための関数です。
--   **C() (src/mml2abc.commonjs.js)**: Peggy.jsパーサの内部で利用されるユーティリティ関数の一つです。
--   **peg$SyntaxError() (src/mml2abc.commonjs.js)**: パーシングエラーが発生した際に利用されるエラーオブジェクトのコンストラクタです。
--   **peg$parse() (src/mml2abc.commonjs.js)**: 生成されたパーサのメインエントリポイントであり、MML文字列を解析し始めます。
+**`peggyjs/mml2abc.pegjs`内の文法規則（自動生成されるパーサーの構成要素）:**
+これらの「関数」はMMLの特定の構文要素を解析するための規則として定義されています。
+- **`MMLs`**: (解析対象: 複数のMMLシーケンス) 複数のMMLトラック全体を解析する最上位の規則。
+- **`MML`**: (解析対象: 単一のMMLシーケンス) 単一のMMLトラック（例えば`o4cdefg`）を解析する規則。
+- **`NOTE`**: (解析対象: 音符) MMLにおける音符（例: `c`, `d#`, `e-`）を解析し、対応するABC記譜法の音符に変換する。
+- **`REST`**: (解析対象: 休符) MMLにおける休符（例: `r`）を解析する。
+- **`OCTAVE`**: (解析対象: オクターブ指定) `o`コマンドによるオクターブの絶対指定（例: `o4`）を解析する。
+- **`OCTAVE_UP`**: (解析対象: オクターブ上げ) `>`記号によるオクターブを一つ上げるコマンドを解析する。
+- **`OCTAVE_DOWN`**: (解析対象: オクターブ下げ) `<`記号によるオクターブを一つ下げるコマンドを解析する。
+- **`NOTE_LENGTH`**: (解析対象: 音符の長さ) `l`コマンドや音符の後ろに続く数値（例: `l4`, `c1`）で音符の長さを指定する部分を解析する。
+- **`CHORD`**: (解析対象: 和音) `<...>`で囲まれた和音表記（例: `<c,e,g>`）を解析する。
+- **`PROGRAM_CHANGE`**: (解析対象: 音色変更) `@`コマンドによる音色変更（例: `@1`）を解析する。
+- **`TEMPO`**: (解析対象: テンポ変更) `t`コマンドによるテンポ指定（例: `t120`）を解析する。
+- **`VOLUME`**: (解析対象: 音量変更) `v`コマンドによる音量指定（例: `v100`）を解析する。
+- **`STACCATO`**: (解析対象: スタッカート) `$staccato(...)`形式のスタッカート表現を解析する。
+- **`TRANSPOSE`**: (解析対象: 移調) `$transpose(...)`形式の移調表現を解析する。
+- **`REPEAT`**: (解析対象: 繰り返し) `[...]n`形式の繰り返し表現を解析する。
+- **`INLINE_ABC`**: (解析対象: ABC記譜法埋め込み) `$abc(...)`でMML内に直接ABC記譜法を埋め込む形式を解析する。
+- **`TIME_SHIFT`**: (解析対象: 時間シフト) `$timeShift(...)`形式の時間シフト表現を解析する。
+- **`TRACK_SEPARATOR`**: (解析対象: トラック区切り) `&`記号によるトラック間の区切りを解析する。
+- **`PITCH`**: (解析対象: 音の高さ) 音名（`a`から`g`）とその修飾記号（`#`, `-`など）を解析する。
+- **`SHARP`**: (解析対象: シャープ) `+`または`#`記号を解析する。
+- **`FLAT`**: (解析対象: フラット) `-`記号を解析する。
+- **`MINUS`**: (解析対象: マイナス記号) 数値の符号としての`-`を解析する。
+- **`INTEGER`**: (解析対象: 整数) 数値を解析する。
+
+**`src/mml2abc.commonjs.js`内の主要な関数:**
+このファイルは`mml2abc.pegjs`から自動生成されたパーサーのランタイムコードを含みます。
+- **`getNoteLengthAbc(length: number, tie?: boolean): string`**:
+  - 役割: 数値で指定された音符の長さをABC記譜法に対応する文字列に変換します。音符がタイで連結されているかどうかも考慮します。
+  - 引数: `length` (数値): 音符の長さ、`tie` (真偽値, オプション): タイの有無。
+  - 戻り値: (文字列) ABC記譜法の長さ表現（例: `"2"`, `"1/2"`）。
+- **`decimalToFraction(decimal: number): string`**:
+  - 役割: 小数値を最も近い分数表現の文字列に変換します。
+  - 引数: `decimal` (数値): 変換する小数値。
+  - 戻り値: (文字列) 分数形式の文字列（例: `"1/4"`）。
+- **`updateSharpFlats(abc: string, track: object): string`**:
+  - 役割: 生成されたABC記譜法文字列内のシャープやフラットの表示を調整し、トラックの状態（現在のキーや臨時記号の状態）を更新します。
+  - 引数: `abc` (文字列): ABC記譜法の一部、`track` (オブジェクト): トラックの現在の状態。
+  - 戻り値: (文字列) 調整後のABC記譜法文字列。
+- **`peg$parseMMLs`, `peg$parseMML`, `peg$parseNOTE`, ... (`peg$parse`プレフィックスの関数群)**:
+  - 役割: `mml2abc.pegjs`で定義された各文法規則に対応する、Peggy.jsパーサーの内部関数群です。入力MML文字列を解析し、抽象構文木 (AST) を構築したり、直接ABC記譜法の断片を生成したりします。これらはパーサーのコアロジックを構成します。
+  - 引数/戻り値: 内部的に複雑な状態管理を行いながら、文字列の特定部分を解析し、結果を返します。
+- **`initTrackParams(): object`**:
+  - 役割: 各MMLトラックの初期パラメータ（例: デフォルトオクターブ、音量、移調設定など）を初期化するオブジェクトを生成します。
+  - 引数: なし。
+  - 戻り値: (オブジェクト) 初期化されたトラックパラメータ。
+- **`insertVolumeBeforeNoteOrRest(abc: string, track: object): string`**:
+  - 役割: 音符や休符の前に、現在のトラックの音量設定をABC記譜法の形式で挿入します。
+  - 引数: `abc` (文字列): ABC記譜法の断片、`track` (オブジェクト): トラックの現在の状態。
+  - 戻り値: (文字列) 音量情報が挿入されたABC記譜法文字列。
+- **`volume2abc(vol: number): string`**:
+  - 役割: MMLの音量値（0-127）をABC記譜法に対応する音量コマンドに変換します。
+  - 引数: `vol` (数値): MMLの音量値。
+  - 戻り値: (文字列) ABC記譜法の音量コマンド（例: `!volume(100)!`）。
+- **`createAbc(mmlAst: object, options: object): string`**:
+  - 役割: MMLパーサーによって生成された抽象構文木 (AST) を受け取り、最終的なABC記譜法文字列に変換する主要な関数です。各種オプションも適用されます。
+  - 引数: `mmlAst` (オブジェクト): MMLの抽象構文木、`options` (オブジェクト): 変換オプション。
+  - 戻り値: (文字列) 完成したABC記譜法文字列。
+- **`postProcess(abc: string): string`**:
+  - 役割: `createAbc`で生成されたABC記譜法文字列に対して、最終的な後処理（例: 整形、不要な空白の除去、特定の記号の調整など）を行います。
+  - 引数: `abc` (文字列): 生成されたABC記譜法文字列。
+  - 戻り値: (文字列) 後処理済みのABC記譜法文字列。
+- **`if`, `while`, `function`, `for`, `map`, `replace`, `switch`**:
+  - 役割: これらはJavaScriptの標準的な制御構文や組み込みメソッドであり、`src/mml2abc.commonjs.js`内のコードロジックを構成するために使用されています。特定の関数ではなく、コードフローやデータ操作の一部として機能します。
 
 ## 関数呼び出し階層ツリー
 ```
@@ -216,4 +243,4 @@ Last updated: 2025-11-11
 - switch (src/mml2abc.commonjs.js)
 
 ---
-Generated at: 2025-11-11 09:26:29 JST
+Generated at: 2025-11-12 07:03:39 JST

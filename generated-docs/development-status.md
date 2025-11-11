@@ -1,4 +1,4 @@
-Last updated: 2025-11-11
+Last updated: 2025-11-12
 
 # Development Status
 
@@ -6,53 +6,52 @@ Last updated: 2025-11-11
 オープン中のIssueはありません。
 
 ## 次の一手候補
-1. 共通ワークフロー導入後の動作確認と設定最適化
-   - 最初の小さな一歩: `daily-project-summary` ワークフローの最新の実行ログを確認し、エラーがないか、期待通りの出力が生成されているかを検証する。
-   - Agent実行プロンプト:
-     ```
-     対象ファイル: .github/workflows/call-daily-project-summary.yml
-                  .github/actions-tmp/.github_automation/project_summary/scripts/generate-project-summary.cjs
+1.  開発状況レポートの生成品質改善
+    -   最初の小さな一歩: 現在の `development-status-prompt.md` と `generated-docs/development-status.md` の内容を比較し、生成されたレポートの精度と指示の遵守状況を評価する。
+    -   Agent実行プロンプ:
+        ```
+        対象ファイル: .github/actions-tmp/.github_automation/project_summary/prompts/development-status-prompt.mdと.github/actions-tmp/generated-docs/development-status.md
 
-     実行内容: GitHub Actions上で実行された `.github/workflows/call-daily-project-summary.yml` の最新の実行ログを分析し、ワークフローが正常に完了しているか、および `.github/actions-tmp/.github_automation/project_summary/scripts/generate-project-summary.cjs` が意図通りに呼び出され、適切なプロジェクトサマリー（例: generated-docs/development-status.md, generated-docs/project-overview.md）を生成しているかを確認してください。特に、エラーメッセージや警告がないか、生成された内容が現在のリポジトリの状態を正確に反映しているかを評価します。
+        実行内容: 対象ファイルを分析し、開発状況生成プロンプト（本プロンプト）の指示が生成された開発状況レポートにどの程度正確に反映されているかを評価してください。特に、以下の点を中心に分析してください：
+        1) 現在のIssuesの要約が3行に収まっているか、正確か
+        2) 次の一手候補が3つリストされているか、それぞれが具体的か
+        3) 各候補の最初の小さな一歩が実行可能か
+        4) 各候補のAgent実行プロンプトがガイドラインに従って記述されているか
+        5) ハルシネーションや不適切な提案が含まれていないか
 
-     確認事項: GitHub Actionsのワークフロー実行ページにアクセスし、`call-daily-project-summary.yml` の最新の実行結果と、各ステップの詳細ログを確認できる状態であること。また、生成されたドキュメントの格納先ディレクトリが存在し、内容を確認できること。
+        確認事項: 分析前に、現在の開発状況生成プロンプトの要件と制約を再確認してください。
 
-     期待する出力: ワークフローの実行ステータス（成功/失敗）と、もし失敗していた場合の主要なエラー原因、または成功している場合の生成されたサマリーの品質に関する簡潔な評価をmarkdown形式で出力してください。必要であれば、設定変更の提案もお願いします。
-     ```
+        期待する出力: 評価結果と、`development-status-prompt.md`を改善するための具体的な提案をmarkdown形式で出力してください。
+        ```
 
-2. `mml2abc` 変換ロジックのテスト網羅性評価
-   - 最初の小さな一歩: `test/mml2abc.test.ts` ファイルを読み込み、現在どのようなMML記法変換ケースがテストされているかをリストアップする。
-   - Agent実行プロンプト:
-     ```
-     対象ファイル: test/mml2abc.test.ts
-                  src/main.ts
-                  peggyjs/mml2abc.pegjs
+2.  共通GitHub Actionsワークフローの利用ガイドライン作成
+    -   最初の小さな一歩: `.github/workflows/call-daily-project-summary.yml` のワークフロー定義をレビューし、外部プロジェクトが利用する際に必要となる設定項目、入力パラメータ、前提条件を洗い出す。
+    -   Agent実行プロンプト:
+        ```
+        対象ファイル: .github/workflows/call-daily-project-summary.ymlと.github/actions-tmp/.github_automation/project_summary/docs/daily-summary-setup.md
 
-     実行内容: `test/mml2abc.test.ts` に記述されているテストケースを分析し、`src/main.ts` および `peggyjs/mml2abc.pegjs` で実装されているMMLからABCへの変換ロジックが、どの程度のMML記法（音符、休符、テンポ、和音、繰り返しなど）をカバーしているかを評価してください。特に、一般的に使われるMMLの機能のうち、テストされていない、または不十分にしかテストされていないと思われるパターンを特定します。
+        実行内容: 対象ファイルについて、外部プロジェクトがこの`call-daily-project-summary.yml`ワークフローを利用する際に必要な設定項目を洗い出し、以下の観点から分析してください：
+        1) 必須入力パラメータ（例：repository-token, target-branch）
+        2) 必須シークレット（例：GITHUB_TOKEN, GEMINI_API_KEY）
+        3) ファイル配置やリポジトリ構造の前提条件
+        4) 外部プロジェクトでの利用時に必要な追加設定や考慮事項
 
-     確認事項: `peggyjs/mml2abc.pegjs` の文法定義と、`src/main.ts` の変換ロジックを理解した上で、テストケースの網羅性を判断してください。既存のテストフレームワーク（Jest）の利用方法も考慮に入れてください。
+        確認事項: 作業前に既存のworkflowファイルとの依存関係、および`daily-summary-setup.md`の内容との整合性を確認してください。
 
-     期待する出力: 既存テストでカバーされているMML変換パターンの概要と、テストカバレッジを向上させるために追加すべきMML記法の具体例（入力MMLと期待されるABC出力のペア）をmarkdown形式で提案してください。
-     ```
+        期待する出力: 外部プロジェクトがこの`call-daily-project-summary.yml`を導入する際の手順書をmarkdown形式で生成してください。具体的には：必須パラメータの設定方法、シークレットの登録手順、前提条件の確認項目を含めてください。
+        ```
 
-3. 共通ワークフローの利用ガイドラインの整備
-   - 最初の小さな一歩: プロジェクトルートの `README.md` と、`.github/actions-tmp/.github_automation/project_summary/docs/daily-summary-setup.md` などの既存のドキュメントを確認し、共通ワークフローに関する記載状況を把握する。
-   - Agent実行プロンプト:
-     ```
-     対象ファイル: README.md
-                  .github/actions-tmp/.github_automation/project_summary/docs/daily-summary-setup.md
-                  .github/actions-tmp/.github_automation/translate/docs/TRANSLATION_SETUP.md
-                  .github/workflows/call-daily-project-summary.yml
-                  .github/workflows/call-translate-readme.yml
-                  .github/workflows/call-issue-note.yml
-                  .github/workflows/callgraph.yml
+3.  MML2ABCコンバーターのテストケース拡充
+    -   最初の小さな一歩: `test/mml2abc.test.ts` をレビューし、現在のテストでカバーされているMML構文と、まだテストされていない可能性のある複雑なMML構文やエッジケース（例: ネストされた繰り返し、異なる音価の組み合わせ、無音指定など）を特定する。
+    -   Agent実行プロンプト:
+        ```
+        対象ファイル: src/mml2abc.commonjs.jsとpeggyjs/mml2abc.pegjsとtest/mml2abc.test.ts
 
-     実行内容: プロジェクトに導入された共通ワークフロー（`daily-project-summary`、`translate-readme`、`issue-note`、`callgraph` など）について、既存のドキュメントが利用者にとって十分に明確で網羅的であるかを確認します。特に、これらのワークフローを自身のプロジェクトで利用する際に必要となる設定手順、必須パラメータ、シークレット、前提条件、および期待される出力物に関する情報が、どのドキュメントにどのように記載されているかを評価し、不足している情報や改善すべき点を洗い出してください。
+        実行内容: 対象ファイルを分析し、MMLからABCへの変換ロジックにおいて、現在の`test/mml2abc.test.ts`で十分にカバーされていないMML構文や変換の脆弱性を見つけ出してください。特に、パーサージェネレーター（peggyjs）で定義されている文法と、実際の変換ロジックの対応関係に注目してください。
 
-     確認事項: 各 `call-*.yml` ファイルがどのように共通アクションを呼び出しているか、またそれぞれの共通アクションがどのような機能を持ち、どのような入出力を想定しているかを理解した上で、利用者の視点に立ってドキュメントの現状を評価してください。
+        確認事項: MMLの一般的な記法とABC記法の変換ルールについて理解していることを前提とします。
 
-     期待する出力: 各共通ワークフローに関する既存ドキュメントの現状（記載の有無、内容の適切さ）をまとめ、利用ガイドラインとして追加・改善すべき具体的な項目（例: 導入手順、設定例、トラブルシューティングなど）をmarkdown形式で提案してください。
-     ```
+        期待する出力: 追加すべきMML入力とそれに対応する期待されるABC出力のペアを3つ提案し、それぞれのテストケースがどのようなMML構文やエッジケースをカバーするのかを説明するmarkdown形式のリストを生成してください。
 
 ---
-Generated at: 2025-11-11 09:26:19 JST
+Generated at: 2025-11-12 07:03:15 JST
