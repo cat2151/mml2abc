@@ -1,77 +1,76 @@
 # mml2abc
-A library transpiles Music Macro Language into ABC music notation.
+A library that transpiles Music Macro Language into ABC music notation.
 
 # Demo
 https://cat2151.github.io/mml2abc/dist/
 
 # Features
-- text to textのシンプルなJavaScriptライブラリ
-- MML から [abcjs](https://github.com/paulrosen/abcjs) 用の ABC music notation を生成
-  - abcjsは、ブラウザで五線譜を描画しつつSoundFont GM音源ソフトシンセを鳴らすライブラリです
-- mml2abcの用途は？
-  - ブラウザで音を鳴らす用
-    - MMLを書いてabcjsを鳴らす用
-  - ObsidianでMMLを書いて音を鳴らす用
+- A simple text-to-text JavaScript library
+- Generates ABC music notation for [abcjs](https://github.com/paulrosen/abcjs) from MML
+  - abcjs is a library that renders musical scores in the browser and plays them using a SoundFont GM software synthesizer.
+- What is mml2abc used for?
+  - For playing sound in the browser
+    - For writing MML and playing it with abcjs
+  - For writing MML and playing sound in Obsidian
 
 # Requirement
-- ブラウザで鳴らす場合
-  - index.htmlをちょっと書けば音が鳴ります
-- Obsidianで鳴らす場合
-  - 開発中です
-- Windows上のコマンドラインで鳴らす場合
-  - 未調査です。
-    - スコープ外とします。「ObsidianでMMLを書いて音を鳴らす」を優先します。
-      - abcjsがObsidianつまりChromiumで音を鳴らせるため、なんらかの方法はありそうです。未調査です。
-      - abcjsに限らず、ABC music notationを入力としてaudioを出力できる、コマンドラインのソフトシンセがあるか？未調査です。
+- When playing in a browser
+  - Sound can be played by writing a simple index.html.
+- When playing in Obsidian
+  - Under development.
+- When playing from the command line on Windows
+  - Not investigated.
+    - Considered out of scope. Priority is given to "playing MML sound in Obsidian".
+      - Since abcjs can play sound in Obsidian (which uses Chromium), there might be a way. Not investigated.
+      - Are there any command-line software synthesizers that can output audio from ABC music notation, not just abcjs? Not investigated.
 
 # Installation
-- mml2abcをwebpageで使う手順は？
-  - サンプルを用意しました。[easymmlabc](https://github.com/cat2151/easymmlabc/)を参照ください
-- ObsidianでMMLで音を鳴らす手順は？
-  - 開発中です。mml2abcを [Obsidian ABC.JS plugin](https://github.com/abcjs-music/obsidian-plugin-abcjs)のforkに組み込む予定です
+- How to use mml2abc on a webpage?
+  - A sample has been prepared. Please refer to [easymmlabc](https://github.com/cat2151/easymmlabc/).
+- How to play MML sound in Obsidian?
+  - Under development. mml2abc is planned to be integrated into a fork of the [Obsidian ABC.JS plugin](https://github.com/abcjs-music/obsidian-plugin-abcjs).
 
 # Usage
-- mml2abcをimportして、関数に引数を渡します
-- 具体例は[easymmlabc](https://github.com/cat2151/easymmlabc/)を参照ください
+- Import mml2abc and pass arguments to the function.
+- For specific examples, please refer to [easymmlabc](https://github.com/cat2151/easymmlabc/).
 
 # Note
-## このprojectが優先すること
-- 概念実証
-  - 高機能、高性能、高信頼性、拡張性、安定性、バージョン互換性よりも、概念実証を優先します
-- 鳴ること
-  - 最低限の音が鳴る状態の維持をできるだけ優先します
-- 関数に`MML文字列`を与えて、`abcjsが演奏可能な文字列`を取得できること
-  - それ以上複雑な機能にせず、シンプルさの維持を優先します
-- 「ObsidianでMMLを書いて音を鳴らす」のを実現すること
-  - より具体的には、[Obsidian ABC.JS plugin](https://github.com/abcjs-music/obsidian-plugin-abcjs) に関連します
-    - 今後 Obsidian ABC.JS plugin をforkし、mml2abcを組み込む予定です
-- MMLフォーマットはシンプル、既存スタンダードのサブセット継承、を優先します
-  - [SiON](https://keim.github.io/SiON/mmlref/sion_mml_reference.html)のサブセット（和音はZ-MUSICのサブセット）とします
-  - 方言の名前は `mmlabc` としました
+## Priorities of this project
+- Proof of concept
+  - Prioritizes proof of concept over advanced features, high performance, high reliability, extensibility, stability, and version compatibility.
+- Playability
+  - Prioritizes maintaining the ability to produce at least basic sound.
+- The ability to provide a `MML string` to a function and obtain an `abcjs-playable string`.
+  - Prioritizes maintaining simplicity by not adding more complex features.
+- Achieving "playing MML sound in Obsidian".
+  - More specifically, this relates to the [Obsidian ABC.JS plugin](https://github.com/abcjs-music/obsidian-plugin-abcjs).
+    - We plan to fork the Obsidian ABC.JS plugin and integrate mml2abc in the future.
+- Prioritizes a simple MML format that inherits a subset of existing standards.
+  - It will be a subset of [SiON](https://keim.github.io/SiON/mmlref/sion_mml_reference.html) (chords will be a subset of Z-MUSIC).
+  - The dialect name is `mmlabc`.
 
-## 分担
-- `mml2abc.pegjs を作ること`
-  - が、このリポジトリの担当です。
-- `easyにmml2abcを使える仕組み を作ること`
-  - は、[easymmlabc](https://github.com/cat2151/easymmlabc/)で担当します。
-- `Obsidianでmml2abcを使える仕組み を作ること`
-  - は、別リポジトリで担当します。今後作成予定です。
+## Responsibilities
+- Creating `mml2abc.pegjs`
+  - is the responsibility of this repository.
+- Creating a mechanism to easily use mml2abc
+  - will be handled by [easymmlabc](https://github.com/cat2151/easymmlabc/).
+- Creating a mechanism to use mml2abc in Obsidian
+  - will be handled in a separate repository, to be created in the future.
 
-## mml2abcそのものの開発手順は？
-- MMLパーサを peggyjs + Jest でTDDすると楽です。なにかの参考にでもなれば幸いなので、できればそのうちもう少し詳しく書いていきます
-- TDDにはJestを使用
-  - VSCodeのJest拡張を使用
-    - テストやpeggyjsを書くだけで自動testが走ってredやgreenができて楽
-- peggyjsとJestの接続には、chokidar を使用
-  - peggyjsを更新すれば、自動でES modules（ブラウザ用）とCommonJS（TDD用 & サーバ用）を生成し、Jestの自動テストが動くので楽
-- peggyjsのprintfデバッグには、Jestのsilentとverboseを制御（VSCodeのJestターミナルでconsole.logを確認できるようになる）
-  - printfデバッグは稀に必要になるので、使えるようにしておくと楽
-- ブラウザpageのライブリロード（ホットリロード）には、webpack-dev-serverを使用
-  - ブラウザで実際に鳴らすことで発覚する問題がある（abcjsの想定外の挙動など）ので、ライブリロードできるようにしておくと楽
-- cloneしたら最初に環境構築。
-  - Node.js関連のinstallや、`npm install`や、VSCodeとVSCodeのJest拡張を入れる等
-- 日々の開発をスタートする手順は、以下だけでOK：
+## mml2abc Development Procedures
+- Developing the MML parser with TDD using peggyjs + Jest is easy. I hope it can be of some reference, and I plan to write more detailed instructions in the future.
+- Jest is used for TDD.
+  - Using the VSCode Jest extension
+    - Automatic tests run (red/green) just by writing tests and peggyjs, making it easy.
+- chokidar is used to connect peggyjs and Jest.
+  - Updating peggyjs automatically generates ES modules (for browsers) and CommonJS (for TDD & servers), and Jest's automated tests run, making it easy.
+- For printf debugging of peggyjs, control Jest's silent and verbose modes (allows viewing console.log in VSCode's Jest terminal).
+  - Printf debugging is occasionally necessary, so having it available makes things easier.
+- webpack-dev-server is used for live reloading (hot reloading) of browser pages.
+  - Issues can be discovered by actually playing in the browser (e.g., unexpected abcjs behavior), so having live reloading makes things easier.
+- First, set up the environment after cloning.
+  - This includes installing Node.js related components, running `npm install`, and installing VSCode and its Jest extension.
+- To start daily development, just follow these steps:
   ```
   code .
   npm run watch
-  ```
