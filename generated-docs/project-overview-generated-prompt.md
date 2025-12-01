@@ -1,4 +1,4 @@
-Last updated: 2025-11-12
+Last updated: 2025-12-02
 
 
 # プロジェクト概要生成プロンプト（来訪者向け）
@@ -169,6 +169,7 @@ https://cat2151.github.io/mml2abc/dist/
   📜 main.js
   📄 mml2abc.mjs
 📁 generated-docs/
+🌐 googled947dc864c270e07.html
 📜 jest.config.js
 📊 package-lock.json
 📊 package.json
@@ -188,6 +189,10 @@ https://cat2151.github.io/mml2abc/dist/
   - インポート: なし
 
 **dist/main.js** (32行, 1225バイト)
+  - 関数: なし
+  - インポート: なし
+
+**googled947dc864c270e07.html** (1行, 53バイト)
   - 関数: なし
   - インポート: なし
 
@@ -312,6 +317,7 @@ README.ja.md
 README.md
 dist/index.html
 dist/main.js
+googled947dc864c270e07.html
 jest.config.js
 package-lock.json
 package.json
@@ -332,4 +338,4 @@ webpack.config.js
 
 
 ---
-Generated at: 2025-11-12 07:02:59 JST
+Generated at: 2025-12-02 07:02:41 JST

@@ -1,4 +1,4 @@
-Last updated: 2025-11-12
+Last updated: 2025-12-02
 
 # 開発状況生成プロンプト（開発者向け）
 
@@ -161,6 +161,7 @@ Last updated: 2025-11-12
 - .github/actions-tmp/generated-docs/project-overview-generated-prompt.md
 - .github/actions-tmp/generated-docs/project-overview.md
 - .github/actions-tmp/generated-docs/style.css
+- .github/actions-tmp/googled947dc864c270e07.html
 - .github/actions-tmp/issue-notes/10.md
 - .github/actions-tmp/issue-notes/11.md
 - .github/actions-tmp/issue-notes/12.md
@@ -204,6 +205,7 @@ Last updated: 2025-11-12
 - dist/main.js
 - dist/mml2abc.mjs
 - generated-docs/project-overview-generated-prompt.md
+- googled947dc864c270e07.html
 - jest.config.js
 - package-lock.json
 - package.json
@@ -222,29 +224,22 @@ Last updated: 2025-11-12
 
 ## 最近の変更（過去7日間）
 ### コミット履歴:
-1110a8b Update project summaries (overview & development status) [auto]
-423f310 Auto-translate README.ja.md to README.md [auto]
-8f7d560 ja
-2ab1b61 github-actionsリポジトリの共通ワークフローを導入
-1609cbf jekyll settings
+5ce11f6 Google検索にindexさせる用
+29d3f42 Google検索にindexさせる用
 
 ### 変更されたファイル:
 .github/workflows/call-daily-project-summary.yml
 .github/workflows/call-issue-note.yml
 .github/workflows/call-translate-readme.yml
-.github/workflows/issue-note.yml
 README.ja.md
 README.md
 _config.yml
-dist/mml2abc.mjs
 generated-docs/development-status-generated-prompt.md
 generated-docs/development-status.md
 generated-docs/project-overview-generated-prompt.md
 generated-docs/project-overview.md
-peggyjs/mml2abc.pegjs
-src/mml2abc.commonjs.js
-test/mml2abc.test.ts
+googled947dc864c270e07.html
 
 
 ---
-Generated at: 2025-11-12 07:02:59 JST
+Generated at: 2025-12-02 07:02:41 JST
