@@ -52,6 +52,8 @@ https://cat2151.github.io/mml2abc/dist/
 ## Responsibilities
 - Creating `mml2abc.pegjs`
   - is the responsibility of this repository.
+  - `peggyjs/mml2abc.pegjs` is the core file of this project and serves as the SSOT (Single Source of Truth).
+    - All conversion logic from MML to ABC music notation is written in this file.
 - Creating a mechanism to easily use mml2abc
   - will be handled by [easymmlabc](https://github.com/cat2151/easymmlabc/).
 - Creating a mechanism to use mml2abc in Obsidian
