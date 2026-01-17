@@ -1,4 +1,4 @@
-Last updated: 2025-12-02
+Last updated: 2026-01-18
 
 # 開発状況生成プロンプト（開発者向け）
 
@@ -106,11 +106,13 @@ Last updated: 2025-12-02
 - .github/actions-tmp/.github/workflows/call-callgraph.yml
 - .github/actions-tmp/.github/workflows/call-daily-project-summary.yml
 - .github/actions-tmp/.github/workflows/call-issue-note.yml
+- .github/actions-tmp/.github/workflows/call-rust-windows-check.yml
 - .github/actions-tmp/.github/workflows/call-translate-readme.yml
 - .github/actions-tmp/.github/workflows/callgraph.yml
 - .github/actions-tmp/.github/workflows/check-recent-human-commit.yml
 - .github/actions-tmp/.github/workflows/daily-project-summary.yml
 - .github/actions-tmp/.github/workflows/issue-note.yml
+- .github/actions-tmp/.github/workflows/rust-windows-check.yml
 - .github/actions-tmp/.github/workflows/translate-readme.yml
 - .github/actions-tmp/.github_automation/callgraph/codeql-queries/callgraph.ql
 - .github/actions-tmp/.github_automation/callgraph/codeql-queries/codeql-pack.lock.yml
@@ -206,6 +208,8 @@ Last updated: 2025-12-02
 - dist/mml2abc.mjs
 - generated-docs/project-overview-generated-prompt.md
 - googled947dc864c270e07.html
+- issue-notes/2.md
+- issue-notes/4.md
 - jest.config.js
 - package-lock.json
 - package.json
@@ -224,22 +228,22 @@ Last updated: 2025-12-02
 
 ## 最近の変更（過去7日間）
 ### コミット履歴:
-5ce11f6 Google検索にindexさせる用
-29d3f42 Google検索にindexさせる用
+a9bfd3b Auto-translate README.ja.md to README.md [auto]
+7c9071f Refine mml2abc.pegjs description in README
+54eab46 Auto-translate README.ja.md to README.md [auto]
+02f3895 Merge pull request #5 from cat2151/copilot/update-readme-peggyjs-ssot
+6e4fb1f Merge branch 'main' into copilot/update-readme-peggyjs-ssot
+aee2b1a docs: Add SSOT documentation to English README.md for consistency
+207d3be docs: Document peggyjs/mml2abc.pegjs as SSOT and core file in README.ja.md
+ce94fa1 Auto-translate README.ja.md to README.md [auto]
+e73ef58 Initial plan
+30092ab Merge pull request #3 from cat2151/copilot/add-badges-to-readme
 
 ### 変更されたファイル:
-.github/workflows/call-daily-project-summary.yml
-.github/workflows/call-issue-note.yml
-.github/workflows/call-translate-readme.yml
 README.ja.md
 README.md
-_config.yml
-generated-docs/development-status-generated-prompt.md
-generated-docs/development-status.md
-generated-docs/project-overview-generated-prompt.md
-generated-docs/project-overview.md
-googled947dc864c270e07.html
+issue-notes/4.md
 
 
 ---
-Generated at: 2025-12-02 07:02:41 JST
+Generated at: 2026-01-18 07:02:20 JST

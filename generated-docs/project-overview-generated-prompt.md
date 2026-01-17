@@ -1,4 +1,4 @@
-Last updated: 2025-12-02
+Last updated: 2026-01-18
 
 
 # プロジェクト概要生成プロンプト（来訪者向け）
@@ -62,6 +62,14 @@ Last updated: 2025-12-02
 ## プロジェクト情報
 名前: 20231210a_mml2abc_and_easyabcjs6
 説明: # mml2abc
+
+<p align="left">
+  <a href="README.ja.md"><img src="https://img.shields.io/badge/🇯🇵-Japanese-red.svg" alt="Japanese"></a>
+  <a href="README.md"><img src="https://img.shields.io/badge/🇺🇸-English-blue.svg" alt="English"></a>
+  <a href="https://deepwiki.com/cat2151/mml2abc"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki"></a>
+  <a href="https://cat2151.github.io/mml2abc/dist/"><img src="https://img.shields.io/badge/🌐-Live%20Demo-green.svg" alt="Live Demo"></a>
+</p>
+
 A library transpiles Music Macro Language into ABC music notation.
 
 # Demo
@@ -115,6 +123,8 @@ https://cat2151.github.io/mml2abc/dist/
 ## 分担
 - `mml2abc.pegjs を作ること`
   - が、このリポジトリの担当です。
+  - [mml2abc.pegjs](peggyjs/mml2abc.pegjs) は、このプロジェクトの中核を担うファイルであり、SSOT（Single Source of Truth：信頼できる唯一の情報源）です。
+    - MMLからABC music notationへの変換の文法の全てがこのファイルに記述されています。
 - `easyにmml2abcを使える仕組み を作ること`
   - は、[easymmlabc](https://github.com/cat2151/easymmlabc/)で担当します。
 - `Obsidianでmml2abcを使える仕組み を作ること`
@@ -170,6 +180,9 @@ https://cat2151.github.io/mml2abc/dist/
   📄 mml2abc.mjs
 📁 generated-docs/
 🌐 googled947dc864c270e07.html
+📁 issue-notes/
+  📖 2.md
+  📖 4.md
 📜 jest.config.js
 📊 package-lock.json
 📊 package.json
@@ -318,6 +331,8 @@ README.md
 dist/index.html
 dist/main.js
 googled947dc864c270e07.html
+issue-notes/2.md
+issue-notes/4.md
 jest.config.js
 package-lock.json
 package.json
@@ -338,4 +353,4 @@ webpack.config.js
 
 
 ---
-Generated at: 2025-12-02 07:02:41 JST
+Generated at: 2026-01-18 07:02:20 JST
