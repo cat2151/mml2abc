@@ -15,72 +15,72 @@ https://cat2151.github.io/mml2abc/dist/
 # Features
 - A simple text-to-text JavaScript library
 - Generates ABC music notation for [abcjs](https://github.com/paulrosen/abcjs) from MML
-  - abcjs is a library that renders sheet music in the browser while playing sounds using a SoundFont GM software synthesizer.
-- Use cases for mml2abc?
+  - abcjs is a library that renders sheet music in the browser while playing a SoundFont GM software sound engine.
+- Use Cases for mml2abc:
   - For playing sounds in the browser
     - For writing MML and playing it with abcjs
   - For writing MML in Obsidian and playing sounds
 
-# Requirement
-- When playing in a browser
-  - Sounds can be played by writing a simple `index.html`.
+# Requirements
+- When playing in the browser
+  - A small `index.html` setup is sufficient to play sound.
 - When playing in Obsidian
   - Under development.
 - When playing from the command line on Windows
-  - Not investigated yet.
-    - This is outside the current scope. Priority is given to "writing MML in Obsidian and playing sounds."
-      - Since abcjs can play sounds in Obsidian (i.e., Chromium), there might be a way. Not investigated.
-      - Are there any command-line software synthesizers that can output audio from ABC music notation, not limited to abcjs? Not investigated.
+  - Not investigated.
+    - This is considered out of scope. Priority is given to "writing MML in Obsidian and playing sounds."
+      - Since abcjs can play sounds in Obsidian (i.e., Chromium), some method might exist. Not investigated.
+      - Are there any command-line software synthesizers that can output audio with ABC music notation as input, not limited to abcjs? Not investigated.
 
 # Installation
-- How to use mml2abc in a webpage?
+- How to use mml2abc on a webpage?
   - A sample has been prepared. Please refer to [easymmlabc](https://github.com/cat2151/easymmlabc/).
 - How to play MML sounds in Obsidian?
-  - Under development. mml2abc will be integrated into a fork of the [Obsidian ABC.JS plugin](https://github.com/abcjs-music/obsidian-plugin-abcjs).
+  - Under development. mml2abc is planned to be integrated into a fork of the [Obsidian ABC.JS plugin](https://github.com/abcjs-music/obsidian-plugin-abcjs).
 
 # Usage
-- Import `mml2abc` and pass arguments to the function.
-- For specific examples, please refer to [easymmlabc](https://github.com/cat2151/easymmlabc/).
+- Import mml2abc and pass arguments to the function.
+- For a specific example, please refer to [easymmlabc](https://github.com/cat2151/easymmlabc/).
 
 # Note
-## Priorities of this Project
-- Proof of concept
-  - Prioritizes proof of concept over high functionality, performance, reliability, extensibility, stability, and version compatibility.
-- Making sound
-  - Prioritizes maintaining a state where at least basic sounds can be played.
-- The ability to provide an `MML string` to a function and obtain an `abcjs-playable string`.
-  - Prioritizes maintaining simplicity by not adding more complex features.
+## Project Priorities
+- Proof of Concept
+  - Proof of concept is prioritized over high functionality, high performance, high reliability, extensibility, stability, and version compatibility.
+- Sound Playback
+  - Maintaining the ability to play at least basic sounds is prioritized as much as possible.
+- The ability to provide an `MML string` to a function and obtain an `abcjs playable string`.
+  - Maintaining simplicity is prioritized, without adding more complex features.
 - Achieving "writing MML in Obsidian and playing sounds."
-  - More specifically, it relates to the [Obsidian ABC.JS plugin](https://github.com/abcjs-music/obsidian-plugin-abcjs).
+  - More specifically, this relates to the [Obsidian ABC.JS plugin](https://github.com/abcjs-music/obsidian-plugin-abcjs).
     - In the future, we plan to fork the Obsidian ABC.JS plugin and integrate mml2abc.
-- Prioritizes a simple MML format, inheriting a subset of existing standards.
+- The MML format prioritizes simplicity and inheriting a subset of existing standards.
   - It will be a subset of [SiON](https://keim.github.io/SiON/mmlref/sion_mml_reference.html) (chords will be a subset of Z-MUSIC).
   - The name of the dialect has been set to `mmlabc`.
 
-## Division of Labor
-- Creating `mml2abc.pegjs`
-  - is the responsibility of this repository.
-  - `peggyjs/mml2abc.pegjs` is the core file of this project and serves as the SSOT (Single Source of Truth).
-    - All conversion logic from MML to ABC music notation is described in this file.
-- Creating a mechanism to use mml2abc easily
-  - is handled by [easymmlabc](https://github.com/cat2151/easymmlabc/).
-- Creating a mechanism to use mml2abc in Obsidian
-  - will be handled in a separate repository. This is planned for future creation.
+## Division of Responsibilities
+- To create `mml2abc.pegjs`.
+  - This is the responsibility of this repository.
+  - [mml2abc.pegjs](peggyjs/mml2abc.pegjs) is the core file of this project and serves as the SSOT (Single Source of Truth).
+    - All of the grammar for converting MML to ABC music notation is described in this file.
+- To create a mechanism to use mml2abc easily.
+  - This is handled by [easymmlabc](https://github.com/cat2151/easymmlabc/).
+- To create a mechanism to use mml2abc in Obsidian.
+  - This will be handled in a separate repository, to be created in the future.
 
-## How to Develop mml2abc itself?
-- Developing the MML parser with peggyjs + Jest using TDD is convenient. I hope it serves as some reference, and I'll try to write more details about it later.
-- Uses Jest for TDD
-  - Uses the Jest extension for VSCode
-    - Tests run automatically (showing red/green) just by writing tests or peggyjs, making development easier.
-- Uses `chokidar` for connecting peggyjs and Jest
-  - Updating peggyjs automatically generates ES modules (for browsers) and CommonJS (for TDD & servers), and Jest's auto-tests run, making it convenient.
-- For `printf` debugging in peggyjs, controls Jest's `silent` and `verbose` options (allows checking `console.log` in VSCode's Jest terminal).
-  - `printf` debugging is occasionally necessary, so having it available makes things easier.
-- Uses `webpack-dev-server` for live reloading (hot reloading) browser pages.
-  - Issues that only become apparent when actually playing in the browser (e.g., unexpected behavior of abcjs) exist, so enabling live reloading makes development easier.
-- First, set up the environment after cloning.
-  - This includes installing Node.js related tools, running `npm install`, installing VSCode and the VSCode Jest extension, etc.
-- To start daily development, just do the following:
+## mml2abc Development Process
+- Developing the MML parser with TDD using peggyjs + Jest is easy. I hope this information is helpful, and I plan to write more detailed instructions in the future.
+- Jest is used for TDD.
+  - Using the VSCode Jest extension.
+    - It's easy to run automated tests (red/green) just by writing tests and peggyjs.
+- chokidar is used to connect peggyjs and Jest.
+  - Updating peggyjs automatically generates ES modules (for browsers) and CommonJS (for TDD & servers), and Jest's automated tests run, making development easier.
+- For printf debugging in peggyjs, control Jest's silent and verbose modes (this allows `console.log` output to be seen in the VSCode Jest terminal).
+  - printf debugging is occasionally necessary, so having it enabled makes things easier.
+- webpack-dev-server is used for live reloading (hot reloading) of browser pages.
+  - Problems sometimes emerge when actually playing in the browser (e.g., unexpected abcjs behavior), so having live reload enabled makes things easier.
+- After cloning, first set up the environment.
+  - This includes installing Node.js related dependencies, running `npm install`, and installing VSCode and the VSCode Jest extension.
+- To start daily development, just run the following:
   ```
   code .
   npm run watch
