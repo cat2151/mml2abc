@@ -60,8 +60,8 @@ https://cat2151.github.io/mml2abc/dist/
 ## 分担
 - `mml2abc.pegjs を作ること`
   - が、このリポジトリの担当です。
-  - `peggyjs/mml2abc.pegjs` は、このプロジェクトの中核を担うファイルであり、SSOT（Single Source of Truth：信頼できる唯一の情報源）です。
-    - MMLからABC music notationへの変換ロジックの全てがこのファイルに記述されています。
+  - [mml2abc.pegjs](peggyjs/mml2abc.pegjs) は、このプロジェクトの中核を担うファイルであり、SSOT（Single Source of Truth：信頼できる唯一の情報源）です。
+    - MMLからABC music notationへの変換の文法の全てがこのファイルに記述されています。
 - `easyにmml2abcを使える仕組み を作ること`
   - は、[easymmlabc](https://github.com/cat2151/easymmlabc/)で担当します。
 - `Obsidianでmml2abcを使える仕組み を作ること`
