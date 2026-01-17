@@ -57,6 +57,15 @@ https://cat2151.github.io/mml2abc/dist/
   - It will be a subset of [SiON](https://keim.github.io/SiON/mmlref/sion_mml_reference.html) (chords will be a subset of Z-MUSIC).
   - The dialect name is `mmlabc`.
 
+## Responsibilities
+- Creating `mml2abc.pegjs`
+  - is the responsibility of this repository.
+  - `peggyjs/mml2abc.pegjs` is the core file of this project and serves as the SSOT (Single Source of Truth).
+    - All conversion logic from MML to ABC music notation is written in this file.
+- Creating a mechanism to easily use mml2abc
+  - will be handled by [easymmlabc](https://github.com/cat2151/easymmlabc/).
+- Creating a mechanism to use mml2abc in Obsidian
+  - will be handled in a separate repository, to be created in the future.
 ## Division of Labor
 - The responsibility of this repository is to create `mml2abc.pegjs`.
 - The responsibility of creating an `easy-to-use mechanism for mml2abc` is handled by [easymmlabc](https://github.com/cat2151/easymmlabc/).
