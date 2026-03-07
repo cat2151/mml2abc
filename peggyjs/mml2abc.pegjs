@@ -17,13 +17,21 @@
     }
   }
   function decimalToFraction(originalDecimal) {
+    if (!Number.isFinite(originalDecimal)) {
+      console.assert(false, "FIXME decimalToFraction: invalid input (Infinity or NaN)");
+      return {numerator: "", denominator: ""};
+    }
     let decimal = originalDecimal;
     let denominator = 1;
-    while (decimal % 1 !== 0) {
+    const maxDenominator = 1000;
+    while (Math.abs(decimal - Math.round(decimal)) > 1e-9 && denominator < maxDenominator) {
       denominator++;
       decimal = originalDecimal * denominator;
     }
-    let numerator = decimal;
+    if (denominator >= maxDenominator) {
+      console.assert(false, "FIXME decimalToFraction: could not find exact fraction within maxDenominator");
+    }
+    let numerator = Math.round(decimal);
     if (numerator == 1) numerator = ""; // memo : for ABC music notation
     if (denominator == 1) denominator = "";
     return {numerator, denominator};
