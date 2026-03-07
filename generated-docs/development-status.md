@@ -1,51 +1,49 @@
-Last updated: 2026-01-18
+Last updated: 2026-03-08
 
 # Development Status
 
 ## 現在のIssues
 オープン中のIssueはありません。
-現在、進行中のタスクや未解決の問題は報告されていません。
-プロジェクトはクリーンな状態で次のステップに進む準備ができています。
 
 ## 次の一手候補
-1. 開発状況レポート [generated-docs/development-status.md] の自動生成機能の検証と改善
-   - 最初の小さな一歩: 現在の`development-status.md`の内容が期待通りに生成されているか、およびその生成プロセスを調査する。
-   - Agent実行プロンプ:
-     ```
-     対象ファイル: _config.yml, .github/actions-tmp/.github_automation/project_summary/scripts/development/DevelopmentStatusGenerator.cjs, .github/actions-tmp/generated-docs/development-status.md, .github/workflows/call-daily-project-summary.yml, .github/actions-tmp/.github/workflows/daily-project-summary.yml, .github/actions-tmp/.github_automation/project_summary/prompts/development-status-prompt.md
-
-     実行内容: `.github/actions-tmp/generated-docs/development-status.md`がどのように生成されているかを分析し、現在の出力（「オープン中のIssueはありません」）が意図されたものか、それとも生成プロセスに問題があるかを特定する。特に、`DevelopmentStatusGenerator.cjs`が`development-status-prompt.md`をどのように利用しているか、そして`_config.yml`や関連するGitHub Actions (`call-daily-project-summary.yml`, `daily-project-summary.yml`)が生成プロセスにどのように影響しているかを調査する。
-
-     確認事項: `daily-project-summary.yml`と`call-daily-project-summary.yml`の連携、`DevelopmentStatusGenerator.cjs`が`IssueTracker.cjs`からIssue情報を取得する方法、そして`_config.yml`がJekyll等によるサイト生成にどのように関与しているかを確認してください。
-
-     期待する出力: `development-status.md`が正しく生成されるための改善点（もしあれば）と、生成プロセスが正常に機能している場合の次の一手（例: プロンプトの改善提案）をmarkdown形式で出力してください。
-     ```
-
-2. `mml2abc`コア機能のテストカバレッジ分析と不足テストケースの特定
-   - 最初の小さな一歩: `peggyjs/mml2abc.pegjs`で定義されている文法ルールに対して、既存の`test/mml2abc.test.ts`がどの程度テストをカバーしているかを分析し、不足しているテストケースのタイプを特定する。
+1. MML解析ロジック（`decimalToFraction`関連）のさらなる堅牢性確認 [Issue #6](../issue-notes/6.md)
+   - 最初の小さな一歩: `peggyjs/mml2abc.pegjs` 内の `decimalToFraction` 関数および関連する解析ロジックについて、特に境界値や非標準的な入力パターンに関する潜在的な問題点を洗い出す。
    - Agent実行プロンプト:
      ```
-     対象ファイル: peggyjs/mml2abc.pegjs, test/mml2abc.test.ts, src/main.ts, jest.config.js
+     対象ファイル: `peggyjs/mml2abc.pegjs` および `test/mml2abc.test.ts`
 
-     実行内容: `peggyjs/mml2abc.pegjs`の文法定義を読み込み、`test/mml2abc.test.ts`内のテストケースが文法の主要なパスやエッジケースをどの程度カバーしているかを分析する。特に、MMLの複雑な構造（例: 和音、繰り返し、変調など）や不正な入力に対するエラーハンドリングが適切にテストされているかを確認し、不足しているテストのカテゴリや具体的なテストアイデアを抽出してください。
+     実行内容: 最近修正された `decimalToFraction` 関数に関連する解析ロジックについて、以下の観点から潜在的な脆弱性（例: 浮動小数点精度、非数値入力、非常に大きい/小さい数値）を分析し、既存のテストがこれらのケースを十分にカバーしているかを確認してください。
 
-     確認事項: `peggyjs`の文法定義における各ルールと、`jest.config.js`のテスト設定を確認。`src/main.ts`が`peggyjs`によって生成されたパーサーをどのように利用しているかを確認してください。
+     確認事項: `decimalToFraction`が使用されるMMLの構文規則、特にテンポや音長指定部分の依存関係を確認してください。また、`test/mml2abc.test.ts`の関連テストケースとの整合性を検証してください。
 
-     期待する出力: 現在のテストカバレッジの概要と、カバレッジを向上させるために追加すべきテストケースの具体的なリスト（入力MML、期待されるABC、想定されるエラーなど）をmarkdown形式で出力してください。
+     期待する出力: 潜在的な脆弱性のリストと、それらを検証するために追加すべきテストケースの概要をMarkdown形式で出力してください。
      ```
 
-3. CodeQL Callgraph [generated-docs/callgraph.html] の生成とレビュープロセスの確立
-   - 最初の小さな一歩: 既存のCodeQL Callgraph生成ワークフローが正しく機能しているかを確認し、`generated-docs/callgraph.html`の最新の状態を生成・確認する。
+2. `mml2abc.pegjs` 文法の可読性と保守性の向上 [Issue #6](../issue-notes/6.md)
+   - 最初の小さな一歩: `peggyjs/mml2abc.pegjs` の文法定義全体を読み直し、特に複雑な部分や繰り返しのあるパターン、コメントが不足している箇所を特定する。
    - Agent実行プロンプト:
      ```
-     対象ファイル: .github/actions-tmp/.github/workflows/callgraph.yml, .github/actions-tmp/.github_automation/callgraph/scripts/generate-html-graph.cjs, .github/actions-tmp/generated-docs/callgraph.html, .github/actions-tmp/.github_automation/callgraph/config/example.json
+     対象ファイル: `peggyjs/mml2abc.pegjs`
 
-     実行内容: `callgraph.yml`ワークフローがCodeQL分析を実行し、その後`generate-html-graph.cjs`スクリプトを使用して`callgraph.html`を生成するプロセスを分析する。現在のプロジェクトの状態に基づいて、実際に`callgraph.html`を生成するステップ（または生成結果を確認するステップ）を特定し、その生成結果が現在のコードベースを正確に反映しているかを確認してください。
+     実行内容: `peggyjs/mml2abc.pegjs` の文法定義について、可読性と保守性を向上させるための具体的なリファクタリング案を検討してください。特に、冗長なルール、複雑すぎるネスト、説明不足な箇所に焦点を当ててください。
 
-     確認事項: `callgraph.yml`が適切なトリガーで実行されているか、CodeQLのデータベース生成が成功しているか、`generate-html-graph.cjs`が必要な依存関係（Node.jsなど）を満たしているかを確認。`config/example.json`がグラフ生成にどう影響するかを確認してください。
+     確認事項: 文法変更が既存のMML入力のパース結果に影響を与えないことを保証するため、変更前に既存のすべてのテストがパスすることを確認してください。
 
-     期待する出力: Callgraphが成功裏に生成されたことの確認、または生成に失敗した場合のトラブルシューティングの提案。また、生成された`callgraph.html`から得られる主要な洞察（例: 主要な依存関係、循環参照の有無など）をmarkdown形式で出力してください。
+     期待する出力: リファクタリングが必要な具体的な箇所（ルール名と行番号）と、それぞれの改善提案（例: ルールの分割、命名規則の統一、コメントの追加）をMarkdown形式で出力してください。
+     ```
+
+3. `mml2abc` のテストカバレッジ拡張と性能評価の検討 [Issue #6](../issue-notes/6.md)
+   - 最初の小さな一歩: 現在のテストスイート (`test/mml2abc.test.ts`) をレビューし、どのようなMML構文（例: 異なる音部記号、調号、複雑な連符、特殊記号）がカバーされているかをリストアップする。
+   - Agent実行プロンプト:
+     ```
+     対象ファイル: `test/mml2abc.test.ts` および `src/mml2abc.commonjs.js`
+
+     実行内容: `mml2abc` コンバーターのテストカバレッジを拡張するための新しいテストケースのアイデアを提案してください。特に、多様なMML構文、エッジケース（非常に長いMML文字列、無効なMML入力）、および性能ボトルネックとなりうるパターンに焦点を当ててください。また、性能評価のための基本的なメトリクスと計測方法も検討してください。
+
+     確認事項: 提案するテストケースが既存のテストと重複しないことを確認し、実行に過度な時間がかからないことを考慮してください。
+
+     期待する出力: 提案する新しいテストケースのカテゴリ（例: 複雑な和音、動的テンポ変更、エラーハンドリング）と、それぞれの簡単なMMLスニペット例、および性能評価の方向性に関するMarkdown形式のレポートを出力してください。
      ```
 
 ---
-Generated at: 2026-01-18 07:02:43 JST
+Generated at: 2026-03-08 07:02:48 JST

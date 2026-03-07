@@ -1,4 +1,4 @@
-Last updated: 2026-01-18
+Last updated: 2026-03-08
 
 
 # プロジェクト概要生成プロンプト（来訪者向け）
@@ -181,8 +181,7 @@ https://cat2151.github.io/mml2abc/dist/
 📁 generated-docs/
 🌐 googled947dc864c270e07.html
 📁 issue-notes/
-  📖 2.md
-  📖 4.md
+  📖 6.md
 📜 jest.config.js
 📊 package-lock.json
 📊 package.json
@@ -213,7 +212,7 @@ https://cat2151.github.io/mml2abc/dist/
   - 関数: なし
   - インポート: なし
 
-**peggyjs/mml2abc.pegjs** (288行, 9458バイト)
+**peggyjs/mml2abc.pegjs** (296行, 9915バイト)
   - 関数: MMLs, MML, NOTE, REST, OCTAVE, OCTAVE_UP, OCTAVE_DOWN, NOTE_LENGTH, CHORD, PROGRAM_CHANGE, TEMPO, VOLUME, STACCATO, TRANSPOSE, REPEAT, INLINE_ABC, TIME_SHIFT, TRACK_SEPARATOR, PITCH, SHARP, FLAT, MINUS, INTEGER
   - インポート: なし
 
@@ -221,11 +220,11 @@ https://cat2151.github.io/mml2abc/dist/
   - 関数: なし
   - インポート: なし
 
-**src/mml2abc.commonjs.js** (1469行, 37937バイト)
-  - 関数: getNoteLengthAbc, decimalToFraction, updateSharpFlats, peg$subclass, C, peg$SyntaxError, peg$padEnd, hex, literalEscape, classEscape, describeExpectation, describeExpected, describeFound, peg$parse, text, offset, range, location, expected, error, peg$literalExpectation, peg$classExpectation, peg$anyExpectation, peg$endExpectation, peg$otherExpectation, peg$computePosDetails, peg$computeLocation, peg$fail, peg$buildSimpleError, peg$buildStructuredError, peg$parseMMLs, peg$parseMML, peg$parseNOTE, peg$parseREST, peg$parseOCTAVE, peg$parseOCTAVE_UP, peg$parseOCTAVE_DOWN, peg$parseNOTE_LENGTH, peg$parseCHORD, peg$parsePROGRAM_CHANGE, peg$parseTEMPO, peg$parseVOLUME, peg$parseSTACCATO, peg$parseTRANSPOSE, peg$parseREPEAT, peg$parseINLINE_ABC, peg$parseTIME_SHIFT, peg$parseTRACK_SEPARATOR, peg$parsePITCH, peg$parseSHARP, peg$parseFLAT, peg$parseMINUS, peg$parseINTEGER, peg$parse_, initTrackParams, insertVolumeBeforeNoteOrRest, volume2abc, createAbc, postProcess, if, while, function, for, map, replace, switch
+**src/mml2abc.commonjs.js** (1489行, 38548バイト)
+  - 関数: getNoteLengthAbc, decimalToFraction, updateSharpFlats, hex, unicodeEscape, literalEscape, classEscape, describeExpectation, describeExpected, describeFound, peg$parse, peg$f0, peg$f1, peg$f2, peg$f3, peg$f4, peg$f5, peg$f6, peg$f7, peg$f8, peg$f9, peg$f10, peg$f11, peg$f12, peg$f13, peg$f14, peg$f15, peg$f16, peg$f17, peg$f18, peg$f19, peg$f20, text, offset, range, location, expected, error, peg$getUnicode, peg$literalExpectation, peg$classExpectation, peg$anyExpectation, peg$endExpectation, peg$otherExpectation, peg$computePosDetails, peg$computeLocation, peg$fail, peg$buildSimpleError, peg$buildStructuredError, peg$parseMMLs, peg$parseMML, peg$parseNOTE, peg$parseREST, peg$parseOCTAVE, peg$parseOCTAVE_UP, peg$parseOCTAVE_DOWN, peg$parseNOTE_LENGTH, peg$parseCHORD, peg$parsePROGRAM_CHANGE, peg$parseTEMPO, peg$parseVOLUME, peg$parseSTACCATO, peg$parseTRANSPOSE, peg$parseREPEAT, peg$parseINLINE_ABC, peg$parseTIME_SHIFT, peg$parseTRACK_SEPARATOR, peg$parsePITCH, peg$parseSHARP, peg$parseFLAT, peg$parseMINUS, peg$parseINTEGER, peg$parse_, initTrackParams, insertVolumeBeforeNoteOrRest, volume2abc, createAbc, postProcess, peg$throw, if, constructor, format, buildMessage, literal, class, any, end, other, for, switch, while
   - インポート: なし
 
-**test/mml2abc.test.ts** (251行, 9452バイト)
+**test/mml2abc.test.ts** (269行, 10171バイト)
   - 関数: なし
   - インポート: ../src/mml2abc.commonjs.js
 
@@ -234,96 +233,7 @@ https://cat2151.github.io/mml2abc/dist/
   - インポート: path
 
 ## 関数呼び出し階層
-- if (src/mml2abc.commonjs.js)
-  - MMLs (peggyjs/mml2abc.pegjs)
-    - getNoteLengthAbc ()
-      - MML (peggyjs/mml2abc.pegjs)
-      - NOTE (peggyjs/mml2abc.pegjs)
-      - REST (peggyjs/mml2abc.pegjs)
-      - OCTAVE (peggyjs/mml2abc.pegjs)
-      - OCTAVE_UP (peggyjs/mml2abc.pegjs)
-      - OCTAVE_DOWN (peggyjs/mml2abc.pegjs)
-      - NOTE_LENGTH (peggyjs/mml2abc.pegjs)
-      - CHORD (peggyjs/mml2abc.pegjs)
-      - PROGRAM_CHANGE (peggyjs/mml2abc.pegjs)
-      - TEMPO (peggyjs/mml2abc.pegjs)
-      - VOLUME (peggyjs/mml2abc.pegjs)
-      - STACCATO (peggyjs/mml2abc.pegjs)
-      - TRANSPOSE (peggyjs/mml2abc.pegjs)
-      - REPEAT (peggyjs/mml2abc.pegjs)
-      - INLINE_ABC (peggyjs/mml2abc.pegjs)
-      - TIME_SHIFT (peggyjs/mml2abc.pegjs)
-      - TRACK_SEPARATOR (peggyjs/mml2abc.pegjs)
-      - PITCH (peggyjs/mml2abc.pegjs)
-      - SHARP (peggyjs/mml2abc.pegjs)
-      - FLAT (peggyjs/mml2abc.pegjs)
-      - MINUS (peggyjs/mml2abc.pegjs)
-      - INTEGER (peggyjs/mml2abc.pegjs)
-      - decimalToFraction ()
-      - updateSharpFlats ()
-      - peg$subclass ()
-      - C ()
-      - peg$SyntaxError ()
-      - peg$padEnd ()
-      - hex ()
-      - literalEscape ()
-      - classEscape ()
-      - describeExpectation ()
-      - describeExpected ()
-      - describeFound ()
-      - peg$parse ()
-      - text ()
-      - offset ()
-      - range ()
-      - location ()
-      - expected ()
-      - error ()
-      - peg$literalExpectation ()
-      - peg$classExpectation ()
-      - peg$anyExpectation ()
-      - peg$endExpectation ()
-      - peg$otherExpectation ()
-      - peg$computePosDetails ()
-      - peg$computeLocation ()
-      - peg$fail ()
-      - peg$buildSimpleError ()
-      - peg$buildStructuredError ()
-      - peg$parseMMLs ()
-      - peg$parseMML ()
-      - peg$parseNOTE ()
-      - peg$parseREST ()
-      - peg$parseOCTAVE ()
-      - peg$parseOCTAVE_UP ()
-      - peg$parseOCTAVE_DOWN ()
-      - peg$parseNOTE_LENGTH ()
-      - peg$parseCHORD ()
-      - peg$parsePROGRAM_CHANGE ()
-      - peg$parseTEMPO ()
-      - peg$parseVOLUME ()
-      - peg$parseSTACCATO ()
-      - peg$parseTRANSPOSE ()
-      - peg$parseREPEAT ()
-      - peg$parseINLINE_ABC ()
-      - peg$parseTIME_SHIFT ()
-      - peg$parseTRACK_SEPARATOR ()
-      - peg$parsePITCH ()
-      - peg$parseSHARP ()
-      - peg$parseFLAT ()
-      - peg$parseMINUS ()
-      - peg$parseINTEGER ()
-      - peg$parse_ ()
-      - initTrackParams ()
-      - insertVolumeBeforeNoteOrRest ()
-      - volume2abc ()
-      - createAbc ()
-      - postProcess ()
-      - function ()
-      - map ()
-      - replace ()
-- while (src/mml2abc.commonjs.js)
-- for (src/mml2abc.commonjs.js)
-- switch (src/mml2abc.commonjs.js)
-
+関数呼び出し階層を分析できませんでした
 
 ## プロジェクト構造（ファイル一覧）
 README.ja.md
@@ -331,8 +241,7 @@ README.md
 dist/index.html
 dist/main.js
 googled947dc864c270e07.html
-issue-notes/2.md
-issue-notes/4.md
+issue-notes/6.md
 jest.config.js
 package-lock.json
 package.json
@@ -353,4 +262,4 @@ webpack.config.js
 
 
 ---
-Generated at: 2026-01-18 07:02:20 JST
+Generated at: 2026-03-08 07:02:25 JST

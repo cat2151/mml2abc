@@ -1,4 +1,4 @@
-Last updated: 2026-01-18
+Last updated: 2026-03-08
 
 # 開発状況生成プロンプト（開発者向け）
 
@@ -104,11 +104,13 @@ Last updated: 2026-01-18
 
 ## プロジェクトのファイル一覧
 - .github/actions-tmp/.github/workflows/call-callgraph.yml
+- .github/actions-tmp/.github/workflows/call-check-large-files.yml
 - .github/actions-tmp/.github/workflows/call-daily-project-summary.yml
 - .github/actions-tmp/.github/workflows/call-issue-note.yml
 - .github/actions-tmp/.github/workflows/call-rust-windows-check.yml
 - .github/actions-tmp/.github/workflows/call-translate-readme.yml
 - .github/actions-tmp/.github/workflows/callgraph.yml
+- .github/actions-tmp/.github/workflows/check-large-files.yml
 - .github/actions-tmp/.github/workflows/check-recent-human-commit.yml
 - .github/actions-tmp/.github/workflows/daily-project-summary.yml
 - .github/actions-tmp/.github/workflows/issue-note.yml
@@ -131,6 +133,9 @@ Last updated: 2026-01-18
 - .github/actions-tmp/.github_automation/callgraph/scripts/find-process-results.cjs
 - .github/actions-tmp/.github_automation/callgraph/scripts/generate-html-graph.cjs
 - .github/actions-tmp/.github_automation/callgraph/scripts/generateHTML.cjs
+- .github/actions-tmp/.github_automation/check-large-files/README.md
+- .github/actions-tmp/.github_automation/check-large-files/check-large-files.toml.default
+- .github/actions-tmp/.github_automation/check-large-files/scripts/check_large_files.py
 - .github/actions-tmp/.github_automation/check_recent_human_commit/scripts/check-recent-human-commit.cjs
 - .github/actions-tmp/.github_automation/project_summary/docs/daily-summary-setup.md
 - .github/actions-tmp/.github_automation/project_summary/prompts/development-status-prompt.md
@@ -187,7 +192,12 @@ Last updated: 2026-01-18
 - .github/actions-tmp/issue-notes/29.md
 - .github/actions-tmp/issue-notes/3.md
 - .github/actions-tmp/issue-notes/30.md
+- .github/actions-tmp/issue-notes/35.md
+- .github/actions-tmp/issue-notes/38.md
 - .github/actions-tmp/issue-notes/4.md
+- .github/actions-tmp/issue-notes/40.md
+- .github/actions-tmp/issue-notes/44.md
+- .github/actions-tmp/issue-notes/52.md
 - .github/actions-tmp/issue-notes/7.md
 - .github/actions-tmp/issue-notes/8.md
 - .github/actions-tmp/issue-notes/9.md
@@ -208,8 +218,7 @@ Last updated: 2026-01-18
 - dist/mml2abc.mjs
 - generated-docs/project-overview-generated-prompt.md
 - googled947dc864c270e07.html
-- issue-notes/2.md
-- issue-notes/4.md
+- issue-notes/6.md
 - jest.config.js
 - package-lock.json
 - package.json
@@ -228,22 +237,29 @@ Last updated: 2026-01-18
 
 ## 最近の変更（過去7日間）
 ### コミット履歴:
-a9bfd3b Auto-translate README.ja.md to README.md [auto]
-7c9071f Refine mml2abc.pegjs description in README
-54eab46 Auto-translate README.ja.md to README.md [auto]
-02f3895 Merge pull request #5 from cat2151/copilot/update-readme-peggyjs-ssot
-6e4fb1f Merge branch 'main' into copilot/update-readme-peggyjs-ssot
-aee2b1a docs: Add SSOT documentation to English README.md for consistency
-207d3be docs: Document peggyjs/mml2abc.pegjs as SSOT and core file in README.ja.md
-ce94fa1 Auto-translate README.ja.md to README.md [auto]
-e73ef58 Initial plan
-30092ab Merge pull request #3 from cat2151/copilot/add-badges-to-readme
+bf05e65 Merge pull request #7 from cat2151/copilot/investigate-infinite-loop-risk
+d56a716 Address review feedback: guard Infinity/NaN, assert on cap, add rest regression tests
+b2a2d2d Fix infinite loop risk in decimalToFraction due to floating-point precision
+0edce23 Initial plan for infinite loop fix in decimalToFraction
+5f3ce9d Initial plan
+49033af Add issue note for #6 [auto]
 
 ### 変更されたファイル:
 README.ja.md
 README.md
+dist/mml2abc.mjs
+generated-docs/development-status-generated-prompt.md
+generated-docs/development-status.md
+generated-docs/project-overview-generated-prompt.md
+generated-docs/project-overview.md
+issue-notes/2.md
 issue-notes/4.md
+issue-notes/6.md
+package-lock.json
+peggyjs/mml2abc.pegjs
+src/mml2abc.commonjs.js
+test/mml2abc.test.ts
 
 
 ---
-Generated at: 2026-01-18 07:02:20 JST
+Generated at: 2026-03-08 07:02:25 JST
