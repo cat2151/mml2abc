@@ -122,6 +122,12 @@ describe("mml2abc", () => {
     test("複付点音符 浮動小数点演算で無限ループリスクがあった値 c24..", () => {
         expect(parse("c24..")).toEqual(prefix + "C7/12");
     });
+    test("複付点音符 rest 浮動小数点演算で無限ループリスクがあった値 r3..", () => {
+        expect(parse("r3..")).toEqual(prefix + "z14/3");
+    });
+    test("複付点音符 rest 浮動小数点演算で無限ループリスクがあった値 r6..", () => {
+        expect(parse("r6..")).toEqual(prefix + "z7/3");
+    });
     test("octave", () => {
         expect(parse("l8 o4c")).toEqual(prefix + "C,");
     });
