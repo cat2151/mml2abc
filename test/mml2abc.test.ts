@@ -110,6 +110,18 @@ describe("mml2abc", () => {
     test("複付点音符 rest", () => {
         expect(parse("l4r..")).toEqual(prefix + "z7/2");
     });
+    test("複付点音符 浮動小数点演算で無限ループリスクがあった値 c3..", () => {
+        expect(parse("c3..")).toEqual(prefix + "C14/3");
+    });
+    test("複付点音符 浮動小数点演算で無限ループリスクがあった値 c6..", () => {
+        expect(parse("c6..")).toEqual(prefix + "C7/3");
+    });
+    test("複付点音符 浮動小数点演算で無限ループリスクがあった値 c12..", () => {
+        expect(parse("c12..")).toEqual(prefix + "C7/6");
+    });
+    test("複付点音符 浮動小数点演算で無限ループリスクがあった値 c24..", () => {
+        expect(parse("c24..")).toEqual(prefix + "C7/12");
+    });
     test("octave", () => {
         expect(parse("l8 o4c")).toEqual(prefix + "C,");
     });
