@@ -64,7 +64,7 @@ https://cat2151.github.io/mml2abc/dist/
 - `easyにmml2abcを使える仕組み を作ること`
   - は、[easymmlabc](https://github.com/cat2151/easymmlabc/)で担当します。
 - `Obsidianでmml2abcを使える仕組み を作ること`
-  - は、別リポジトリで担当します。今後作成予定です。
+  - は、 https://github.com/cat2151/obsidian-plugin-mmlabc をご利用ください
 
 ## mml2abcそのものの開発手順は？
 - MMLパーサを peggyjs + Jest でTDDすると楽です。なにかの参考にでもなれば幸いなので、できればそのうちもう少し詳しく書いていきます
