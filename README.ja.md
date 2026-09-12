@@ -51,8 +51,7 @@ https://cat2151.github.io/mml2abc/dist/
 - 関数に`MML文字列`を与えて、`abcjsが演奏可能な文字列`を取得できること
   - それ以上複雑な機能にせず、シンプルさの維持を優先します
 - 「ObsidianでMMLを書いて音を鳴らす」のを実現すること
-  - より具体的には、[Obsidian ABC.JS plugin](https://github.com/abcjs-music/obsidian-plugin-abcjs) に関連します
-    - 今後 Obsidian ABC.JS plugin をforkし、mml2abcを組み込む予定です
+  - https://github.com/cat2151/obsidian-plugin-mmlabc をご利用ください
 - MMLフォーマットはシンプル、既存スタンダードのサブセット継承、を優先します
   - [SiON](https://keim.github.io/SiON/mmlref/sion_mml_reference.html)のサブセット（和音はZ-MUSICのサブセット）とします
   - 方言の名前は `mmlabc` としました
