@@ -25,7 +25,7 @@ https://cat2151.github.io/mml2abc/dist/
 - ブラウザで鳴らす場合
   - index.htmlをちょっと書けば音が鳴ります
 - Obsidianで鳴らす場合
-  - 開発中です
+  - https://github.com/cat2151/obsidian-plugin-mmlabc をご利用ください
 - Windows上のコマンドラインで鳴らす場合
   - 未調査です。
     - スコープ外とします。「ObsidianでMMLを書いて音を鳴らす」を優先します。
@@ -36,7 +36,7 @@ https://cat2151.github.io/mml2abc/dist/
 - mml2abcをwebpageで使う手順は？
   - サンプルを用意しました。[easymmlabc](https://github.com/cat2151/easymmlabc/)を参照ください
 - ObsidianでMMLで音を鳴らす手順は？
-  - 開発中です。mml2abcを [Obsidian ABC.JS plugin](https://github.com/abcjs-music/obsidian-plugin-abcjs)のforkに組み込む予定です
+  - https://github.com/cat2151/obsidian-plugin-mmlabc をご利用ください
 
 # Usage
 - mml2abcをimportして、関数に引数を渡します
